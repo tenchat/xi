@@ -6,26 +6,25 @@
 
 ```
 .
-├── index.html        # 首页（章节导览与入口）
-├── exam.html         # 模拟试卷下载页
-├── unit/             # 各章节讲义（HTML）
-│   ├── 1.html
-│   ├── 2.html
-│   ├── 3.html
-│   ├── 4.html
-│   ├── 5.html
-│   └── STATS_REFERENCE.html
-├── exam/             # 试卷 PDF（多个 AI 模型版本）
-├── tex/              # 试卷 LaTeX 源文件
-├── md/               # 复习提纲与备考指南 Markdown 源
-└── doc/              # 复习提纲 Word 文档
+├── index.html          # 首页（章节导览与入口）
+├── exam.html           # 模拟试卷页面
+├── notes.html          # 复习笔记页面
+├── md/
+│   └── SKILL.md        # 复习提纲与备考指南
+├── unit/
+│   ├── note1.md ~ note6.md    # 各章节讲义（Markdown）
+│   ├── question1.md ~ question2.md  # 练习题
+│   └── svg/            # 配图资源（0.svg ~ 17.svg）
+└── README.md
 ```
 
 ## 内容组成
 
-- **章节讲义**（unit/）：基于 Markdown 渲染的 HTML 章节页面
-- **模拟试卷**（exam/ + tex/）：由多种 LLM 生成的对照版本，便于横向比较
-- **复习提纲**（md/ + doc/）：结构化复习要点
+- **章节讲义**（unit/note*.md）：各章节知识点与重点内容
+- **练习题**（unit/question*.md）：章节配套练习与答案
+- **模拟试卷**（exam.html）：综合测试与模拟考试
+- **复习笔记**（notes.html）：重点整理与复习要点
+- **配图资源**（unit/svg/）：公式、图表等可视化素材
 
 ## 本地运行
 
@@ -52,8 +51,7 @@ python -m http.server 8000
 ## 工具链
 
 - 页面字体：Noto Serif / Noto Sans SC（Google Fonts）
-- 试卷源：LaTeX
-- 内容协作：Markdown + Word
+- 内容协作：Markdown
 
 ## 许可
 

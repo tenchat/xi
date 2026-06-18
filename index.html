@@ -1,0 +1,1414 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>习近平新时代中国特色社会主义思想概论 · 复习资料</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked@12.0.0/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.9/dist/purify.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Noto+Sans+SC:wght@300;400;500;600&display=swap');
+
+    :root {
+      --ink: #1a1410;
+      --red: #c0392b;
+      --red-light: #f9edec;
+      --gold: #a07800;
+      --gold-light: #fdf8e8;
+      --blue: #1a4a7a;
+      --blue-light: #eaf1f8;
+      --green: #1a5c3a;
+      --green-light: #eaf5ef;
+      --purple: #5a3a7a;
+      --purple-light: #f0e8f5;
+      --border: #d4c8b8;
+      --bg: #faf8f4;
+      --paper: #fffefb;
+      --sidebar-width: 280px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Noto Sans SC', 'PingFang SC', sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      font-size: 15px;
+      line-height: 1.85;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* ── Header ── */
+    .header {
+      background: linear-gradient(135deg, #8b1a1a 0%, #a52a2a 60%, #c0392b 100%);
+      color: #fff;
+      padding: 24px 36px;
+      position: relative;
+      overflow: hidden;
+      height: 80px;
+      display: flex;
+      align-items: center;
+    }
+
+    .header::before {
+      content: '';
+      position: absolute;
+      top: -50px; right: -50px;
+      width: 260px; height: 260px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.05);
+    }
+
+    .header::after {
+      content: '';
+      position: absolute;
+      bottom: -70px; left: 80px;
+      width: 180px; height: 180px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.04);
+    }
+
+    .header h1 {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .header .subtitle {
+      margin-left: 20px;
+      color: rgba(255,255,255,0.7);
+      font-size: 13px;
+      letter-spacing: 1px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── Layout ── */
+    .container {
+      display: flex;
+      height: calc(100vh - 80px);
+    }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      width: var(--sidebar-width);
+      background: var(--paper);
+      border-right: 2px solid var(--border);
+      overflow-y: auto;
+      overflow-x: hidden;
+      flex-shrink: 0;
+      transition: width 0.3s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar.collapsed {
+      width: 70px;
+    }
+
+    .sidebar-header {
+      padding: 20px 24px 16px;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(180deg, #f8f6f2 0%, var(--paper) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 70px;
+    }
+
+    .sidebar.collapsed .sidebar-header {
+      padding: 20px 12px 16px;
+      justify-content: center;
+    }
+
+    .sidebar-header-content {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .sidebar.collapsed .sidebar-header-content {
+      display: none;
+    }
+
+    .sidebar-title {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--red);
+      margin-bottom: 8px;
+      white-space: nowrap;
+    }
+
+    .sidebar-subtitle {
+      font-size: 12px;
+      color: #888;
+      line-height: 1.6;
+      white-space: nowrap;
+    }
+
+    .sidebar-footer {
+      border-top: 1px solid var(--border);
+      padding: 8px 0;
+      margin-top: auto;
+    }
+
+    .nav-list {
+      padding: 12px 0;
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+
+    .nav-group-title {
+      padding: 14px 24px 6px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #999;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .sidebar.collapsed .nav-group-title {
+      display: none;
+    }
+
+    .nav-item {
+      padding: 12px 24px;
+      font-size: 14px;
+      color: #555;
+      cursor: pointer;
+      border-left: 4px solid transparent;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      position: relative;
+    }
+
+    .sidebar.collapsed .nav-item {
+      padding: 12px 12px;
+      justify-content: center;
+    }
+
+    .nav-item:hover {
+      background: var(--red-light);
+      color: var(--red);
+    }
+
+    .nav-item.active {
+      background: linear-gradient(90deg, rgba(192, 57, 43, 0.08) 0%, transparent 100%);
+      color: var(--red);
+      border-left-color: var(--red);
+      font-weight: 600;
+    }
+
+    .nav-home {
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 4px;
+      padding-bottom: 12px;
+    }
+
+    .nav-home:hover {
+      background: var(--gold-light);
+      color: var(--gold);
+    }
+
+    .nav-item .nav-icon {
+      width: 24px;
+      height: 24px;
+      background: var(--red);
+      color: #fff;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .nav-item.active .nav-icon {
+      background: var(--red);
+    }
+
+    .nav-item .nav-text {
+      flex: 1;
+      line-height: 1.5;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .sidebar.collapsed .nav-item .nav-text {
+      display: none;
+    }
+
+    /* Tooltip for collapsed sidebar */
+    .sidebar.collapsed .nav-item::after {
+      content: attr(data-title);
+      position: absolute;
+      left: 100%;
+      top: 50%;
+      transform: translateY(-50%);
+      background: var(--ink);
+      color: #fff;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 13px;
+      white-space: nowrap;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.2s ease;
+      z-index: 1000;
+      margin-left: 8px;
+      pointer-events: none;
+    }
+
+    .sidebar.collapsed .nav-item:hover::after {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* ── Content Area ── */
+    .content {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .md-viewer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow-y: auto;
+      padding: 28px 40px 80px;
+      /* 右侧给目录预留空间，避免滚动条被目录挡住 */
+      scrollbar-gutter: stable;
+    }
+
+    /* 电脑端：给目录留出右侧空间（220px 宽 + 间距） */
+    @media (min-width: 769px) {
+      .md-viewer { padding-right: 260px; }
+    }
+    /* 移动端：目录 160px 宽 */
+    @media (max-width: 768px) {
+      .md-viewer { padding-right: 180px; }
+    }
+
+    /* ── Loading State ── */
+    .loading {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      color: #888;
+    }
+
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid var(--border);
+      border-top-color: var(--red);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 16px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* ── Welcome Screen ── */
+    .welcome {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg);
+    }
+
+    .welcome-content {
+      text-align: center;
+      max-width: 520px;
+      padding: 40px;
+    }
+
+    .welcome-icon {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, var(--red) 0%, #d04030 100%);
+      color: #fff;
+      border-radius: 20px;
+      font-size: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px;
+      box-shadow: 0 8px 24px rgba(192, 57, 43, 0.25);
+    }
+
+    .welcome h2 {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 24px;
+      color: var(--red);
+      margin-bottom: 16px;
+    }
+
+    .welcome p {
+      color: #666;
+      font-size: 15px;
+      line-height: 1.8;
+      margin-bottom: 24px;
+    }
+
+    .welcome-hint {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      background: var(--red-light);
+      color: var(--red);
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .welcome-hint svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    /* ── Markdown 渲染样式 ── */
+    .md h1 {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 24px;
+      color: var(--red);
+      margin: 20px 0 16px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--red-light);
+    }
+    .md h2 {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 21px;
+      color: var(--red);
+      margin: 26px 0 14px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--red-light);
+    }
+    .md h3 {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 17px;
+      color: var(--blue);
+      margin: 22px 0 10px;
+      padding-left: 12px;
+      border-left: 4px solid var(--blue);
+    }
+    .md h4 {
+      font-size: 15px;
+      color: var(--green);
+      margin: 16px 0 8px;
+      font-weight: 600;
+    }
+    .md h5, .md h6 {
+      font-size: 14px;
+      color: var(--purple);
+      margin: 12px 0 6px;
+      font-weight: 600;
+    }
+    .md p { margin: 10px 0; }
+    .md strong { color: var(--red); font-weight: 600; }
+    .md em { color: var(--green); }
+
+    /* ── 题目样式 ── */
+    .md p:has(.q-num) { line-height: 1.9; }
+    .q-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 26px;
+      height: 26px;
+      padding: 0 8px;
+      margin-right: 8px;
+      background: var(--red);
+      color: #fff;
+      font-weight: 700;
+      font-size: 14px;
+      border-radius: 13px;
+      vertical-align: middle;
+    }
+    .q-options { color: #555; }
+    .q-options .opt { display: block; margin: 2px 0; padding-left: 4px; }
+
+    /* 答案按钮 */
+    .q-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 12px;
+      margin: 0 6px;
+      background: var(--red-light);
+      color: var(--red);
+      border: 1px solid var(--red);
+      border-radius: 14px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+      vertical-align: baseline;
+    }
+    .q-toggle:hover { background: var(--red); color: #fff; }
+    .q-toggle.revealed { background: var(--green-light); color: var(--green); border-color: var(--green); cursor: default; }
+    .q-toggle.revealed:hover { background: var(--green-light); color: var(--green); }
+
+    .q-answer {
+      display: none;
+      margin: 4px 0 10px 0;
+      padding: 6px 14px;
+      background: var(--green-light);
+      border-left: 3px solid var(--green);
+      border-radius: 4px;
+      color: var(--green);
+      font-weight: 600;
+      font-size: 14px;
+    }
+    .q-answer.shown { display: block; animation: fadeIn 0.3s ease; }
+    .q-answer .label { color: #888; font-weight: 400; margin-right: 6px; }
+
+    /* ── 右侧悬浮目录导航（完全透明背景 + 同步滚动）── */
+    .toc {
+      position: fixed;
+      top: 100px;
+      right: 16px;
+      width: 220px;
+      max-height: calc(100vh - 140px);
+      z-index: 50;
+      display: none;
+    }
+
+    .toc-header {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--red);
+      padding: 4px 8px 8px;
+      letter-spacing: 2px;
+      opacity: 0.7;
+      user-select: none;
+    }
+
+    .toc-list {
+      max-height: calc(100vh - 180px);
+      overflow-y: auto;
+      padding: 4px 0;
+      /* 完全透明背景 */
+      background: transparent;
+      scroll-behavior: smooth;
+    }
+    /* 隐藏滚动条但保留滚动功能 */
+    .toc-list::-webkit-scrollbar { width: 0; background: transparent; }
+    .toc-list { scrollbar-width: none; }
+
+    .toc-item {
+      display: block;
+      padding: 7px 10px;
+      margin: 1px 0;
+      font-size: 13px;
+      color: rgba(80, 70, 60, 0.55);
+      text-decoration: none;
+      border-radius: 6px;
+      cursor: pointer;
+      position: relative;
+      transition: color 0.25s ease, transform 0.25s ease, opacity 0.25s ease;
+      line-height: 1.45;
+      border-left: 2px solid transparent;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-weight: 400;
+    }
+    .toc-item:hover {
+      color: var(--red);
+      background: rgba(192, 57, 43, 0.06);
+    }
+    .toc-item.active {
+      color: var(--red);
+      font-weight: 600;
+      border-left-color: var(--red);
+      background: rgba(192, 57, 43, 0.08);
+    }
+    /* 非当前章节透明度降低，强化焦点 */
+    .toc-item { opacity: 0.7; }
+    .toc-item.active,
+    .toc-item:hover { opacity: 1; }
+    .toc-item.lv-1 {
+      font-family: 'Noto Serif SC', serif;
+      font-weight: 700;
+      color: rgba(40, 30, 20, 0.7);
+      font-size: 13.5px;
+      margin-top: 10px;
+    }
+    .toc-item.lv-1:first-child { margin-top: 0; }
+    .toc-item.lv-2 { padding-left: 22px; font-size: 12.5px; }
+
+    /* 移动端尺寸适配 */
+    @media (max-width: 768px) {
+      .toc { right: 8px; top: 76px; width: 160px; }
+      .toc-header { font-size: 11px; padding: 4px 4px 6px; }
+      .toc-item { font-size: 12px; padding: 6px 8px; }
+      .toc-item.lv-1 { font-size: 12.5px; }
+      .toc-item.lv-2 { padding-left: 16px; font-size: 11.5px; }
+    }
+
+    /* ── 锚点滚动偏移（避开 sticky header）── */
+    .md h1, .md h2, .md h3 { scroll-margin-top: 100px; }
+
+    .md ul, .md ol { margin: 10px 0 12px 24px; }
+    .md li { margin: 4px 0; }
+    .md li > ul, .md li > ol { margin: 4px 0 4px 24px; }
+
+    .md blockquote {
+      background: var(--blue-light);
+      border-left: 4px solid var(--blue);
+      padding: 10px 16px;
+      margin: 12px 0;
+      border-radius: 4px;
+      color: var(--ink);
+    }
+    .md blockquote p { margin: 4px 0; }
+
+    .md code {
+      background: var(--gold-light);
+      color: var(--gold);
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: 'JetBrains Mono', 'Consolas', monospace;
+      font-size: 0.9em;
+    }
+    .md pre {
+      background: #2a2620;
+      color: #f0e8d8;
+      padding: 14px 18px;
+      border-radius: 6px;
+      overflow-x: auto;
+      margin: 12px 0;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    .md pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+      font-size: inherit;
+    }
+
+    .md a {
+      color: var(--blue);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.2s;
+    }
+    .md a:hover { border-bottom-color: var(--blue); }
+
+    .md hr {
+      border: none;
+      border-top: 1px dashed var(--border);
+      margin: 24px 0;
+    }
+
+    .md table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0;
+      background: var(--paper);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+    .md th {
+      background: var(--red);
+      color: #fff;
+      padding: 10px 12px;
+      text-align: left;
+      font-weight: 500;
+      font-size: 14px;
+    }
+    .md td {
+      padding: 9px 12px;
+      border-bottom: 1px solid var(--border);
+      font-size: 14px;
+    }
+    .md tr:nth-child(even) td { background: var(--bg); }
+
+    .md img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 6px;
+      margin: 10px 0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    /* Mermaid 图表 */
+    .mermaid {
+      background: var(--paper);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 18px;
+      margin: 16px 0;
+      text-align: center;
+      overflow-x: auto;
+    }
+    .mermaid svg { max-width: 100%; height: auto; }
+
+    /* 错误状态 */
+    .md-error {
+      background: var(--red-light);
+      border: 1px solid var(--red);
+      border-radius: 6px;
+      padding: 16px 20px;
+      margin: 14px 0;
+      color: var(--red);
+    }
+    .md-error strong { display: block; margin-bottom: 6px; }
+
+    /* ── Mobile Toggle ── */
+    .mobile-toggle {
+      display: none;
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      width: 50px;
+      height: 50px;
+      background: var(--red);
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      font-size: 20px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      z-index: 1000;
+      transition: transform 0.2s;
+    }
+
+    .mobile-toggle:hover {
+      transform: scale(1.1);
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      .header {
+        padding: 16px 20px;
+        height: 60px;
+      }
+
+      .header h1 {
+        font-size: 16px;
+      }
+
+      .header .subtitle {
+        display: none;
+      }
+
+      .sidebar {
+        position: fixed;
+        left: -100%;
+        top: 60px;
+        height: calc(100vh - 60px);
+        z-index: 999;
+        transition: left 0.3s ease;
+        box-shadow: 4px 0 20px rgba(0,0,0,0.1);
+      }
+
+      .sidebar.open {
+        left: 0;
+      }
+
+      .mobile-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .welcome-content {
+        padding: 20px;
+      }
+
+      .welcome-icon {
+        width: 60px;
+        height: 60px;
+        font-size: 28px;
+      }
+
+      .welcome h2 {
+        font-size: 20px;
+      }
+
+      .md-viewer {
+        padding: 20px 16px 60px;
+      }
+    }
+
+    /* ── Scrollbar ── */
+    .sidebar::-webkit-scrollbar,
+    .md-viewer::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .sidebar::-webkit-scrollbar-track,
+    .md-viewer::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .sidebar::-webkit-scrollbar-thumb,
+    .md-viewer::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 3px;
+    }
+
+    .sidebar::-webkit-scrollbar-thumb:hover,
+    .md-viewer::-webkit-scrollbar-thumb:hover {
+      background: #bbb;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <div class="header">
+    <h1>习近平新时代中国特色社会主义思想概论</h1>
+    <div class="subtitle">复习资料 · 笔记与练习题</div>
+  </div>
+
+  <!-- Main Container -->
+  <div class="container">
+    <!-- Sidebar Navigation -->
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-header-content">
+          <div class="sidebar-title">📚 章节导航</div>
+          <div class="sidebar-subtitle">点击章节开始学习</div>
+        </div>
+      </div>
+      <div class="nav-list" id="navList">
+        <div class="nav-item nav-home" data-title="回到主页" onclick="showWelcome()">
+          <div class="nav-icon" style="background: var(--gold);">🏠</div>
+          <div class="nav-text">回到主页</div>
+        </div>
+        <!-- Navigation items will be dynamically generated -->
+      </div>
+      <div class="sidebar-footer">
+        <div class="nav-item nav-about" data-title="关于" onclick="window.open('https://blog.zhong2.fun/', '_blank')">
+          <div class="nav-icon" style="background: var(--red);">©</div>
+          <div class="nav-text">关于</div>
+        </div>
+        <div class="nav-item nav-collapse" data-title="折叠导航栏" onclick="toggleSidebarCollapse()">
+          <div class="nav-icon" style="background: var(--red);">◀</div>
+          <div class="nav-text">折叠</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Content Area -->
+    <div class="content" id="content">
+      <!-- Welcome Screen -->
+      <div class="welcome" id="welcome">
+        <div class="welcome-content">
+          <div class="welcome-icon">📖</div>
+          <h2>欢迎使用复习资料</h2>
+          <p>
+            这是《习近平新时代中国特色社会主义思想概论》课程的复习资料汇总页面。<br>
+            请从左侧导航栏选择章节笔记或练习题开始学习。
+          </p>
+          <div class="welcome-hint">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 18l6-6-6-6"/>
+            </svg>
+            选择章节开始
+          </div>
+        </div>
+      </div>
+
+      <!-- Loading State -->
+      <div class="loading" id="loading" style="display: none;">
+        <div class="loading-spinner"></div>
+        <div>正在加载内容...</div>
+      </div>
+
+      <!-- Markdown Viewer -->
+      <div class="md-viewer" id="mdViewer" style="display: none;">
+        <div class="md" id="mdContent"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 右侧悬浮目录（透明背景 + 同步滚动） -->
+  <aside class="toc" id="toc" aria-label="本页目录">
+    <div class="toc-header">本页目录</div>
+    <nav class="toc-list" id="tocList"></nav>
+  </aside>
+
+  <!-- Mobile Toggle Button -->
+  <button class="mobile-toggle" id="mobileToggle" onclick="toggleSidebar()">
+    ☰
+  </button>
+
+  <script>
+    // ══════════════════════════════════════════════
+    // 章节配置 - unit 目录下的 md 文件
+    // note*.md 作为复习笔记，question*.md 作为练习题
+    // ══════════════════════════════════════════════
+    const units = [
+      { id: 'note1',     group: '复习笔记', title: '复习笔记 一', file: 'unit/note1.md',     icon: '1' },
+      { id: 'note2',     group: '复习笔记', title: '复习笔记 二', file: 'unit/note2.md',     icon: '2' },
+      { id: 'note3',     group: '复习笔记', title: '复习笔记 三', file: 'unit/note3.md',     icon: '3' },
+      { id: 'note4',     group: '复习笔记', title: '复习笔记 四', file: 'unit/note4.md',     icon: '4' },
+      { id: 'note5',     group: '复习笔记', title: '复习笔记 五', file: 'unit/note5.md',     icon: '5' },
+      { id: 'note6',     group: '复习笔记', title: '复习笔记 六', file: 'unit/note6.md',     icon: '6' },
+      { id: 'question1', group: '练习题',   title: '练习题 一',   file: 'unit/question1.md', icon: 'Q' },
+      { id: 'question2', group: '练习题',   title: '练习题 二',   file: 'unit/question2.md', icon: 'Q' },
+    ];
+
+    // ══════════════════════════════════════════════
+    // 全局状态
+    // ══════════════════════════════════════════════
+    let currentUnit = null;
+    let contentCache = {};
+
+    // ══════════════════════════════════════════════
+    // 配置 marked：支持 GFM
+    // ══════════════════════════════════════════════
+    if (typeof marked !== 'undefined') {
+      marked.setOptions({
+        gfm: true,
+        breaks: true,
+        headerIds: true,
+        mangle: false
+      });
+    }
+
+    // ══════════════════════════════════════════════
+    // 初始化 Mermaid
+    // ══════════════════════════════════════════════
+    let mermaidReady = false;
+    if (typeof mermaid !== 'undefined') {
+      mermaid.initialize({
+        startOnLoad: false,
+        theme: 'default',
+        securityLevel: 'loose',
+        fontFamily: 'inherit',
+        flowchart: { useMaxWidth: true, htmlLabels: true }
+      });
+      mermaidReady = true;
+    }
+
+    // 把 marked 输出的 <pre><code class="language-mermaid"> 转换成 <div class="mermaid">
+    function extractMermaidBlocks(root) {
+      const blocks = [];
+      root.querySelectorAll('pre > code.language-mermaid').forEach(code => {
+        const pre = code.parentElement;
+        const source = code.textContent;
+        const div = document.createElement('div');
+        div.className = 'mermaid';
+        div.textContent = source;
+        pre.replaceWith(div);
+        blocks.push(div);
+      });
+      return blocks;
+    }
+
+    async function renderMermaid(blocks) {
+      if (!mermaidReady || blocks.length === 0) return;
+      try {
+        await mermaid.run({ nodes: blocks });
+      } catch (err) {
+        console.error('Mermaid 渲染失败：', err);
+        blocks.forEach(b => {
+          b.innerHTML = `<div class="md-error"><strong>⚠️ 图表渲染失败</strong>${err.message}</div>`;
+        });
+      }
+    }
+
+    // ══════════════════════════════════════════════
+    // 处理题目：将"参考答案：xxx"替换为可点击按钮
+    // 同时美化题目编号和选项
+    // ══════════════════════════════════════════════
+    function processQuestions(root) {
+      // 1) 遍历所有 <p>，将"参考答案："行替换为按钮 + 隐藏的答案块
+      // 遍历两次以处理 answer 行与题干分离的情况
+      const paragraphs = Array.from(root.querySelectorAll('p'));
+
+      paragraphs.forEach(p => {
+        const text = p.textContent;
+        // 匹配 "参考答案：xxx"（可能带空白）
+        const m = text.match(/^\s*参考答案[：:]\s*(.+?)\s*$/);
+        if (!m) return;
+
+        const answer = m[1].trim();
+        if (!answer) return;
+
+        // 找到上一个非空段落（即题目或选项所在的段落），将按钮插入其后
+        const answerEl = document.createElement('div');
+        answerEl.className = 'q-answer';
+        answerEl.innerHTML = `<span class="label">参考答案</span>${escapeHtml(answer)}`;
+
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'q-toggle';
+        btn.innerHTML = '显示答案';
+        btn.addEventListener('click', () => {
+          answerEl.classList.add('shown');
+          btn.classList.add('revealed');
+          btn.innerHTML = '已显示';
+        });
+
+        // 将按钮插入到答案段落内（替换原文本）
+        p.innerHTML = '';
+        p.appendChild(btn);
+        p.appendChild(answerEl);
+      });
+
+      // 调试：报告按钮数量
+      console.log('[processQuestions] 答案按钮数量:', root.querySelectorAll('.q-toggle').length);
+
+      // 2) 美化题目编号和选项
+      paragraphs.forEach(p => {
+        const html = p.innerHTML;
+        // 题目编号："1、" 或 "1. " 开头
+        const numMatch = html.match(/^(\s*)(\d+)\s*[、.]\s*/);
+        if (numMatch) {
+          const num = numMatch[2];
+          p.innerHTML = html.replace(
+            numMatch[0],
+            `${numMatch[1]}<span class="q-num">${num}</span> `
+          );
+        }
+      });
+
+      // 3) 将连续的 A./B./C. 选项拆成独立块（同一段落内）
+      paragraphs.forEach(p => {
+        if (p.querySelector('.q-toggle') || p.querySelector('.q-answer')) return;
+        // 仅当段落包含至少 2 个 "X . " 形式时才处理
+        const text = p.textContent;
+        const optMatches = text.match(/[A-N]\s*\.\s*/g);
+        if (!optMatches || optMatches.length < 2) return;
+
+        // 按选项切分
+        const parts = p.innerHTML.split(/(?=[A-N]\s*\.\s*)/);
+        const wrapper = document.createElement('div');
+        wrapper.className = 'q-options';
+
+        parts.forEach(part => {
+          const optMatch = part.match(/^\s*([A-N])\s*\.\s*([\s\S]*)/);
+          if (optMatch) {
+            const optEl = document.createElement('span');
+            optEl.className = 'opt';
+            optEl.innerHTML = `<strong>${optMatch[1]}.</strong> ${optMatch[2].trim()}`;
+            wrapper.appendChild(optEl);
+          } else if (part.trim()) {
+            // 题目题干部分
+            const stemEl = document.createElement('div');
+            stemEl.innerHTML = part;
+            wrapper.appendChild(stemEl);
+          }
+        });
+
+        p.replaceWith(wrapper);
+      });
+    }
+
+    function escapeHtml(s) {
+      return s.replace(/[&<>"']/g, c => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      }[c]));
+    }
+
+    // ══════════════════════════════════════════════
+    // 初始化
+    // ══════════════════════════════════════════════
+    function init() {
+      renderNavigation();
+      setupKeyboardNavigation();
+      initSidebarState();
+
+      // 检查URL参数，如果有指定章节则自动加载
+      const params = new URLSearchParams(window.location.search);
+      const unitId = params.get('unit');
+      if (unitId) {
+        loadUnit(unitId);
+      }
+    }
+
+    // ══════════════════════════════════════════════
+    // 渲染导航列表（按分组）
+    // ══════════════════════════════════════════════
+    function renderNavigation() {
+      const navList = document.getElementById('navList');
+      // 保留"回到主页"按钮
+      const homeButton = navList.querySelector('.nav-home');
+      navList.innerHTML = '';
+      if (homeButton) {
+        navList.appendChild(homeButton);
+      }
+
+      // 按 group 分组
+      const groups = {};
+      units.forEach(unit => {
+        if (!groups[unit.group]) groups[unit.group] = [];
+        groups[unit.group].push(unit);
+      });
+
+      Object.keys(groups).forEach(groupName => {
+        // 分组标题
+        const groupTitle = document.createElement('div');
+        groupTitle.className = 'nav-group-title';
+        groupTitle.textContent = groupName;
+        navList.appendChild(groupTitle);
+
+        // 分组下的导航项
+        groups[groupName].forEach(unit => {
+          const navItem = document.createElement('div');
+          navItem.className = 'nav-item';
+          navItem.dataset.id = unit.id;
+          navItem.dataset.title = unit.title;
+          navItem.onclick = () => loadUnit(unit.id);
+
+          navItem.innerHTML = `
+            <div class="nav-icon">${unit.icon}</div>
+            <div class="nav-text">${unit.title}</div>
+          `;
+
+          navList.appendChild(navItem);
+        });
+      });
+    }
+
+    // ══════════════════════════════════════════════
+    // 加载章节
+    // ══════════════════════════════════════════════
+    function loadUnit(unitId) {
+      const unit = units.find(u => u.id === unitId);
+      if (!unit) {
+        console.error('Unit not found:', unitId);
+        return;
+      }
+
+      // 更新当前状态
+      currentUnit = unitId;
+
+      // 更新导航项状态
+      document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.toggle('active', item.dataset.id === unitId);
+      });
+
+      // 更新URL参数
+      const url = new URL(window.location);
+      url.searchParams.set('unit', unitId);
+      window.history.pushState({}, '', url);
+
+      // 隐藏欢迎屏幕，显示内容区
+      document.getElementById('welcome').style.display = 'none';
+      document.getElementById('loading').style.display = 'block';
+      document.getElementById('mdViewer').style.display = 'none';
+
+      // 检查缓存
+      if (contentCache[unitId]) {
+        showContent(unitId, contentCache[unitId]);
+      } else {
+        loadMarkdown(unit);
+      }
+
+      // 移动端关闭侧边栏
+      if (window.innerWidth <= 768) {
+        document.getElementById('sidebar').classList.remove('open');
+      }
+    }
+
+    // ══════════════════════════════════════════════
+    // 加载并渲染 Markdown
+    // ══════════════════════════════════════════════
+    async function loadMarkdown(unit) {
+      const target = document.getElementById('mdContent');
+      try {
+        const res = await fetch(unit.file);
+        if (!res.ok) {
+          throw new Error(`HTTP ${res.status} ${res.statusText}`);
+        }
+        const md = await res.text();
+        const html = marked.parse(md);
+        const safe = DOMPurify.sanitize(html);
+
+        // 缓存渲染后的 HTML
+        contentCache[unit.id] = safe;
+
+        showContent(unit.id, safe);
+      } catch (err) {
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('mdViewer').style.display = 'block';
+        target.innerHTML = `
+          <div class="md-error">
+            <strong>⚠️ 加载失败</strong>
+            无法读取文件 <code>${unit.file}</code><br>
+            错误信息：${err.message}
+            <br><br>
+            <small>提示：浏览器直接打开 <code>file://</code> 协议时 <code>fetch</code> 会被拦截，请用本地服务器（如 <code>python -m http.server</code>）打开。</small>
+          </div>
+        `;
+      }
+    }
+
+    // ══════════════════════════════════════════════
+    // 显示已渲染的内容
+    // ══════════════════════════════════════════════
+    async function showContent(unitId, html) {
+      const target = document.getElementById('mdContent');
+      target.innerHTML = html;
+
+      // 隐藏加载状态，显示内容
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('mdViewer').style.display = 'block';
+
+      // 滚动到顶部
+      document.getElementById('mdViewer').scrollTop = 0;
+
+      // 处理题目：隐藏参考答案
+      processQuestions(target);
+
+      // 把 mermaid 代码块转换成图表容器
+      const mermaidBlocks = extractMermaidBlocks(target);
+      await renderMermaid(mermaidBlocks);
+
+      // 重新触发 KaTeX 渲染
+      if (typeof renderMathInElement !== 'undefined') {
+        renderMathInElement(target, {
+          delimiters: [
+            { left: '$$', right: '$$', display: true },
+            { left: '$', right: '$', display: false }
+          ]
+        });
+      }
+
+      // 构建右侧目录
+      buildTOC(target);
+    }
+
+    // ══════════════════════════════════════════════
+    // 目录构建与滚动联动
+    // ══════════════════════════════════════════════
+    let tocHeadings = [];      // 当前文档的所有标题元素
+    let tocItems = [];         // 对应的目录项 <a>
+    let tocSyncEnabled = false;
+
+    function buildTOC(root) {
+      const toc = document.getElementById('toc');
+      const list = document.getElementById('tocList');
+      list.innerHTML = '';
+
+      // 提取 h1、h2，给它们添加 id
+      const headings = root.querySelectorAll('h1, h2');
+      if (headings.length === 0) {
+        toc.style.display = 'none';
+        return;
+      }
+
+      toc.style.display = 'block';
+      headings.forEach((h, i) => {
+        if (!h.id) h.id = 'h-' + i;
+      });
+
+      tocHeadings = Array.from(headings);
+      tocItems = [];
+
+      tocHeadings.forEach(h => {
+        const level = parseInt(h.tagName.substring(1)); // 1 or 2
+        const a = document.createElement('a');
+        a.className = 'toc-item lv-' + level;
+        a.textContent = h.textContent.trim();
+        a.href = '#' + h.id;
+        a.dataset.target = h.id;
+        a.addEventListener('click', (e) => {
+          e.preventDefault();
+          const target = document.getElementById(h.id);
+          if (target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            setActiveTocItem(h.id);
+          }
+        });
+        list.appendChild(a);
+        tocItems.push(a);
+      });
+
+      // 初始化：第一个高亮
+      if (tocHeadings[0]) setActiveTocItem(tocHeadings[0].id);
+
+      // 启用同步滚动
+      tocSyncEnabled = true;
+    }
+
+    function setActiveTocItem(id) {
+      const idx = tocHeadings.findIndex(h => h.id === id);
+      if (idx === -1) return;
+      // 高亮
+      tocItems.forEach((item, i) => item.classList.toggle('active', i === idx));
+      // 让目录滚动条移动到当前项（保持当前项居中）
+      const list = document.getElementById('tocList');
+      const item = tocItems[idx];
+      if (item && list) {
+        const itemTop = item.offsetTop;
+        const itemHeight = item.offsetHeight;
+        const listHeight = list.clientHeight;
+        const target = itemTop - listHeight / 2 + itemHeight / 2;
+        list.scrollTo({ top: Math.max(0, target), behavior: 'smooth' });
+      }
+    }
+
+    // 正文滚动 → 找到当前最靠上的标题 → 同步目录
+    function onPageScroll() {
+      if (!tocSyncEnabled || tocHeadings.length === 0) return;
+      // 触发线：相对于 viewport（getBoundingClientRect 已是 viewport 坐标）
+      const triggerY = 120;
+      let current = tocHeadings[0];
+      for (const h of tocHeadings) {
+        const rect = h.getBoundingClientRect();
+        if (rect.top - triggerY <= 0) {
+          current = h;
+        } else {
+          break;
+        }
+      }
+      setActiveTocItem(current.id);
+    }
+
+    // 把监听挂在真正的滚动容器上（.md-viewer）
+    // 用 mousedown 后再绑定，确保 viewer 已存在
+    function bindTocScroll() {
+      const viewer = document.getElementById('mdViewer');
+      if (viewer) {
+        viewer.addEventListener('scroll', onPageScroll, { passive: true });
+      }
+    }
+    // 首次加载时绑定一次（mdViewer 在 DOM 中已存在）
+    bindTocScroll();
+
+    // ══════════════════════════════════════════════
+    // 键盘导航
+    // ══════════════════════════════════════════════
+    function setupKeyboardNavigation() {
+      document.addEventListener('keydown', (e) => {
+        if (currentUnit === null) return;
+        const idx = units.findIndex(u => u.id === currentUnit);
+        // 左箭头：上一章
+        if (e.key === 'ArrowLeft' && idx > 0) {
+          loadUnit(units[idx - 1].id);
+        }
+        // 右箭头：下一章
+        if (e.key === 'ArrowRight' && idx < units.length - 1) {
+          loadUnit(units[idx + 1].id);
+        }
+        // Escape：返回欢迎页
+        if (e.key === 'Escape') {
+          showWelcome();
+        }
+      });
+    }
+
+    // ══════════════════════════════════════════════
+    // 显示欢迎屏幕
+    // ══════════════════════════════════════════════
+    function showWelcome() {
+      currentUnit = null;
+      document.getElementById('welcome').style.display = 'flex';
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('mdViewer').style.display = 'none';
+      document.getElementById('toc').style.display = 'none';
+      document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.remove('active');
+      });
+      // 清除URL参数
+      const url = new URL(window.location);
+      url.searchParams.delete('unit');
+      window.history.pushState({}, '', url);
+    }
+
+    // ══════════════════════════════════════════════
+    // 移动端侧边栏切换
+    // ══════════════════════════════════════════════
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      sidebar.classList.toggle('open');
+    }
+
+    // ══════════════════════════════════════════════
+    // 侧边栏折叠/展开
+    // ══════════════════════════════════════════════
+    function toggleSidebarCollapse() {
+      const sidebar = document.getElementById('sidebar');
+      const collapseBtn = document.querySelector('.nav-collapse');
+      const collapseIcon = collapseBtn.querySelector('.nav-icon');
+      const collapseText = collapseBtn.querySelector('.nav-text');
+      const isCollapsed = sidebar.classList.toggle('collapsed');
+
+      // 更新按钮图标和文字
+      collapseIcon.textContent = isCollapsed ? '▶' : '◀';
+      collapseText.textContent = isCollapsed ? '展开' : '折叠';
+      collapseBtn.dataset.title = isCollapsed ? '展开导航栏' : '折叠导航栏';
+
+      // 保存状态到localStorage
+      localStorage.setItem('sidebarCollapsed', isCollapsed);
+    }
+
+    // 初始化侧边栏折叠状态
+    function initSidebarState() {
+      const sidebar = document.getElementById('sidebar');
+      const collapseBtn = document.querySelector('.nav-collapse');
+      const collapseIcon = collapseBtn.querySelector('.nav-icon');
+      const collapseText = collapseBtn.querySelector('.nav-text');
+      const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+
+      if (isCollapsed) {
+        sidebar.classList.add('collapsed');
+        collapseIcon.textContent = '▶';
+        collapseText.textContent = '展开';
+        collapseBtn.dataset.title = '展开导航栏';
+      }
+    }
+
+    // 点击内容区域关闭侧边栏
+    document.getElementById('content').addEventListener('click', () => {
+      if (window.innerWidth <= 768) {
+        document.getElementById('sidebar').classList.remove('open');
+      }
+    });
+
+    // ══════════════════════════════════════════════
+    // 浏览器前进/后退支持
+    // ══════════════════════════════════════════════
+    window.addEventListener('popstate', () => {
+      const params = new URLSearchParams(window.location.search);
+      const unitId = params.get('unit');
+      if (unitId) {
+        loadUnit(unitId);
+      } else {
+        showWelcome();
+      }
+    });
+
+    // 初始化
+    init();
+  </script>
+
+
+</body>
+</html>

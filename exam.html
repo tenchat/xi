@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>模拟试题 · 统计学复习</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Noto+Sans+SC:wght@300;400;500;600&display=swap');
+
+    :root {
+      --ink: #1a1410;
+      --red: #c0392b;
+      --red-light: #f9edec;
+      --gold: #a07800;
+      --gold-light: #fdf8e8;
+      --blue: #1a4a7a;
+      --blue-light: #eaf1f8;
+      --green: #1a5c3a;
+      --green-light: #eaf5ef;
+      --purple: #5a3a7a;
+      --purple-light: #f0e8f5;
+      --border: #d4c8b8;
+      --bg: #faf8f4;
+      --paper: #fffefb;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Noto Sans SC', 'PingFang SC', sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      font-size: 15px;
+      line-height: 1.85;
+      padding: 0;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #1a3a5c 0%, #1a4a7a 60%, #2a5a8a 100%);
+      color: #fff;
+      padding: 28px 36px;
+      position: relative;
+      overflow: hidden;
+    }
+    .header::before {
+      content: '';
+      position: absolute;
+      top: -50px; right: -50px;
+      width: 240px; height: 240px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+    }
+    .header h1 {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      position: relative; z-index: 1;
+    }
+    .header .subtitle {
+      margin-top: 6px;
+      color: rgba(255,255,255,0.75);
+      font-size: 13px;
+      letter-spacing: 1px;
+      position: relative; z-index: 1;
+    }
+    .header .ch {
+      display: inline-block;
+      background: rgba(255,255,255,0.15);
+      padding: 3px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      margin-right: 12px;
+      letter-spacing: 1px;
+    }
+
+    .nav {
+      background: var(--paper);
+      border-bottom: 2px solid var(--border);
+      padding: 0 20px;
+      display: flex;
+      gap: 4px;
+      overflow-x: auto;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    }
+    .nav-tab {
+      padding: 14px 18px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--ink);
+      border: none;
+      background: transparent;
+      border-bottom: 3px solid transparent;
+      transition: all 0.2s;
+      white-space: nowrap;
+      font-family: inherit;
+    }
+    .nav-tab:hover { color: var(--blue); }
+    .nav-tab.active {
+      color: var(--red);
+      border-bottom-color: var(--red);
+      font-weight: 600;
+    }
+
+    .main { padding: 28px 36px 60px; max-width: 1200px; margin: 0 auto; }
+
+    .section { display: none; animation: fadeIn 0.3s ease; }
+    .section.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+    h2 {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 22px;
+      color: var(--red);
+      margin: 28px 0 16px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid var(--red-light);
+    }
+    h3 {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 17px;
+      color: var(--blue);
+      margin: 22px 0 10px;
+      padding-left: 12px;
+      border-left: 4px solid var(--blue);
+    }
+    h4 {
+      font-size: 15px;
+      color: var(--green);
+      margin: 16px 0 8px;
+      font-weight: 600;
+    }
+    p { margin: 8px 0; }
+
+    .card {
+      background: var(--paper);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 18px 22px;
+      margin: 14px 0;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+    .keypoint {
+      background: var(--red-light);
+      border-left: 4px solid var(--red);
+      padding: 12px 16px;
+      margin: 12px 0;
+      border-radius: 4px;
+    }
+    .note {
+      background: var(--blue-light);
+      border-left: 4px solid var(--blue);
+      padding: 10px 14px;
+      margin: 10px 0;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    .warn {
+      background: var(--gold-light);
+      border-left: 4px solid var(--gold);
+      padding: 10px 14px;
+      margin: 10px 0;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    .toc {
+      background: var(--paper);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 18px 22px;
+      margin: 12px 0;
+    }
+    .toc h4 {
+      color: var(--red);
+      margin-bottom: 10px;
+    }
+    .toc-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 8px;
+    }
+    .toc-grid a {
+      display: block;
+      color: var(--ink);
+      text-decoration: none;
+      padding: 6px 10px;
+      border-radius: 4px;
+      font-size: 14px;
+      transition: all 0.2s;
+    }
+    .toc-grid a:hover {
+      background: var(--blue-light);
+      color: var(--blue);
+    }
+
+    .exam-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 14px;
+      margin: 14px 0;
+    }
+    .exam-card {
+      background: var(--paper);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--blue);
+      border-radius: 6px;
+      padding: 14px 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+      color: var(--ink);
+      display: block;
+    }
+    .exam-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      border-left-color: var(--red);
+    }
+    .exam-card .exam-title {
+      font-weight: 600;
+      color: var(--red);
+      font-size: 15px;
+      margin-bottom: 4px;
+    }
+    .exam-card .exam-meta {
+      color: #888;
+      font-size: 12px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .exam-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+    .exam-title-block h2 { margin: 0 0 4px 0; border: none; padding: 0; }
+    .exam-title-block .source {
+      color: #888;
+      font-size: 13px;
+    }
+
+    .download-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 22px;
+      background: var(--red);
+      color: #fff;
+      text-decoration: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.2s;
+      box-shadow: 0 2px 6px rgba(192, 57, 43, 0.2);
+    }
+    .download-btn:hover {
+      background: #a83224;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(192, 57, 43, 0.3);
+    }
+    .download-btn svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+    }
+    .download-btn.secondary {
+      background: var(--blue);
+      box-shadow: 0 2px 6px rgba(26, 74, 122, 0.2);
+    }
+    .download-btn.secondary:hover {
+      background: #143a5f;
+      box-shadow: 0 4px 12px rgba(26, 74, 122, 0.3);
+    }
+
+    .pdf-viewer {
+      width: 100%;
+      height: 78vh;
+      min-height: 600px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--paper);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+
+    .pdf-slot {
+      width: 100%;
+      height: 78vh;
+      min-height: 600px;
+      border: 1px dashed var(--border);
+      border-radius: 8px;
+      background: var(--paper);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #999;
+      font-size: 13px;
+      letter-spacing: 0.5px;
+    }
+    .pdf-slot::before {
+      content: '📄 切换到此标签页时加载 PDF';
+    }
+    .pdf-slot.loaded {
+      border: none;
+      box-shadow: none;
+      padding: 0;
+    }
+    .pdf-slot.loaded::before { content: none; }
+
+    .meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 10px 0;
+    }
+    .meta-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: var(--blue-light);
+      color: var(--blue);
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .meta-badge.green { background: var(--green-light); color: var(--green); }
+    .meta-badge.gold { background: var(--gold-light); color: var(--gold); }
+    .meta-badge.purple { background: var(--purple-light); color: var(--purple); }
+
+    .top-nav {
+      display: flex;
+      justify-content: space-between;
+      margin: 30px 0 0;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+    }
+    .top-nav a {
+      color: var(--blue);
+      text-decoration: none;
+      font-size: 14px;
+      padding: 6px 14px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      transition: all 0.2s;
+    }
+    .top-nav a:hover { background: var(--blue-light); }
+
+    @media (max-width: 768px) {
+      .header { padding: 20px; }
+      .header h1 { font-size: 20px; }
+      .main { padding: 20px 16px 40px; }
+      .nav { padding: 0 8px; }
+      .nav-tab { padding: 12px 12px; font-size: 13px; }
+      .pdf-viewer { height: 60vh; min-height: 400px; }
+      .pdf-slot { height: 60vh; min-height: 400px; }
+      .exam-header { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <h1><span class="ch">模拟试题</span>AI 出题 · 多版本对照</h1>
+  <div class="subtitle">Mock Exams · 由不同 AI 模型生成的统计学模拟试题集</div>
+</div>
+
+<nav class="nav" id="navTabs">
+  <button class="nav-tab active" data-tab="overview">📋 全部试卷</button>
+  <button class="nav-tab" data-tab="claude">Claude</button>
+  <button class="nav-tab" data-tab="deepseek">Deepseek</button>
+  <button class="nav-tab" data-tab="gemini">Gemini</button>
+  <button class="nav-tab" data-tab="kimi_a">Kimi A 卷</button>
+  <button class="nav-tab" data-tab="kimi_b">Kimi B 卷</button>
+  <button class="nav-tab" data-tab="glm_a">GLM A 卷</button>
+  <button class="nav-tab" data-tab="glm_b">GLM B 卷</button>
+  <button class="nav-tab" data-tab="qianwen">通义千问</button>  
+  <button class="nav-tab" data-tab="minimax">Minimax</button>
+</nav>
+
+<div class="main">
+
+  <!-- ============ 试卷总览 ============ -->
+  <div class="section active" id="section-overview">
+    <h2>一、试卷总览</h2>
+
+    <div class="card">
+      <h3>使用说明</h3>
+      <p>本页面汇总了 <strong>8 份</strong>由不同 AI 模型生成的统计学模拟试题 PDF，所有文件均存放于 <code>./exam/</code> 目录下。</p>
+      <ul>
+        <li>点击下方任意试卷卡片即可切换查看对应 PDF。</li>
+        <li>每份试卷页面均提供 <strong>下载按钮</strong>，可保存到本地打印或离线作答。</li>
+        <li>顶部导航栏也可快速切换不同 AI 生成的试卷。</li>
+        <li>建议先做 <span class="meta-badge purple">A 卷</span>，再做 <span class="meta-badge purple">B 卷</span>，对比不同模型的出题风格。</li>
+      </ul>
+    </div>
+
+    <div class="keypoint">
+      <strong>学习建议</strong>：多份试卷对照练习，可帮助你熟悉不同题型的出题角度，弥补单一视角的盲区。
+    </div>
+
+    <h3>试卷列表</h3>
+    <div class="exam-list">
+      <a class="exam-card" onclick="switchTab('claude')">
+        <div class="exam-title">📘 统计学_Claude</div>
+        <div class="exam-meta"><span>约 180 KB</span><span>Claude</span></div>
+      </a>
+      <a class="exam-card" onclick="switchTab('deepseek')">
+        <div class="exam-title">📘 统计学_Deepseek</div>
+        <div class="exam-meta"><span>约 132 KB</span><span>Deepseek</span></div>
+      </a>
+      <a class="exam-card" onclick="switchTab('gemini')">
+        <div class="exam-title">📘 统计学_Gemini</div>
+        <div class="exam-meta"><span>约 141 KB</span><span>Gemini</span></div>
+      </a>
+      <a class="exam-card" onclick="switchTab('kimi_a')">
+        <div class="exam-title">📘 统计学_Kimi A 卷</div>
+        <div class="exam-meta"><span>约 173 KB</span><span>Kimi · A 卷</span></div>
+      </a>
+      <a class="exam-card" onclick="switchTab('kimi_b')">
+        <div class="exam-title">📘 统计学_Kimi B 卷</div>
+        <div class="exam-meta"><span>约 221 KB</span><span>Kimi · B 卷</span></div>
+      </a>
+      <a class="exam-card" onclick="switchTab('glm_a')">
+        <div class="exam-title">📘 统计学_GLM A 卷</div>
+        <div class="exam-meta"><span>约 208 KB</span><span>GLM · A 卷</span></div>
+      </a>
+      <a class="exam-card" onclick="switchTab('glm_b')">
+        <div class="exam-title">📘 统计学_GLM B 卷</div>
+        <div class="exam-meta"><span>约 205 KB</span><span>GLM · B 卷</span></div>
+      </a>
+      <a class="exam-card" onclick="switchTab('qianwen')">
+        <div class="exam-title">📘 统计学_千问</div>
+        <div class="exam-meta"><span>约 143 KB</span><span>通义千问</span></div>
+      </a>
+      <a class="exam-card" onclick="switchTab('minimax')">
+        <div class="exam-title">📘 统计学_Minimax</div>
+        <div class="exam-meta"><span>约 143 KB</span><span>Minimax</span></div>
+      </a>
+    </div>
+
+    <div class="note">
+      <strong>提示</strong>：若 PDF 在浏览器中无法直接预览，可点击对应试卷卡片的下载按钮，将文件保存到本地后使用 PDF 阅读器打开。
+    </div>
+  </div>
+
+  <!-- ============ Claude ============ -->
+  <div class="section" id="section-claude">
+    <div class="exam-header">
+      <div class="exam-title-block">
+        <h2>📘 统计学 · Claude 出题</h2>
+        <div class="source">文件：exam/统计学_Claude.pdf</div>
+      </div>
+      <div>
+        <a class="download-btn" href="exam/统计学_Claude.pdf" download>
+          <svg viewBox="0 0 24 24"><path d="M5 20h14v-2H5v2zM19 9h-4V3H9v6H5l7 7 7-7z"/></svg>
+          下载 PDF
+        </a>
+      </div>
+    </div>
+    <div class="meta-row">
+      <span class="meta-badge">📄 PDF 格式</span>
+      <span class="meta-badge green">🤖 Claude</span>
+      <span class="meta-badge">~180 KB</span>
+    </div>
+    <div class="pdf-slot" data-pdf="exam/统计学_Claude.pdf"></div>
+  </div>
+
+  <!-- ============ Deepseek ============ -->
+  <div class="section" id="section-deepseek">
+    <div class="exam-header">
+      <div class="exam-title-block">
+        <h2>📘 统计学 · Deepseek 出题</h2>
+        <div class="source">文件：exam/统计学_Deepseek.pdf</div>
+      </div>
+      <div>
+        <a class="download-btn" href="exam/统计学_Deepseek.pdf" download>
+          <svg viewBox="0 0 24 24"><path d="M5 20h14v-2H5v2zM19 9h-4V3H9v6H5l7 7 7-7z"/></svg>
+          下载 PDF
+        </a>
+      </div>
+    </div>
+    <div class="meta-row">
+      <span class="meta-badge">📄 PDF 格式</span>
+      <span class="meta-badge gold">🐋 Deepseek</span>
+      <span class="meta-badge">~132 KB</span>
+    </div>
+    <div class="pdf-slot" data-pdf="exam/统计学_Deepseek.pdf"></div>
+  </div>
+
+  <!-- ============ Gemini ============ -->
+  <div class="section" id="section-gemini">
+    <div class="exam-header">
+      <div class="exam-title-block">
+        <h2>📘 统计学 · Gemini 出题</h2>
+        <div class="source">文件：exam/统计学_Gemini.pdf</div>
+      </div>
+      <div>
+        <a class="download-btn" href="exam/统计学_Gemini.pdf" download>
+          <svg viewBox="0 0 24 24"><path d="M5 20h14v-2H5v2zM19 9h-4V3H9v6H5l7 7 7-7z"/></svg>
+          下载 PDF
+        </a>
+      </div>
+    </div>
+    <div class="meta-row">
+      <span class="meta-badge">📄 PDF 格式</span>
+      <span class="meta-badge purple">✨ Gemini</span>
+      <span class="meta-badge">~141 KB</span>
+    </div>
+    <div class="pdf-slot" data-pdf="exam/统计学_Gemini.pdf"></div>
+  </div>
+
+  <!-- ============ Kimi A ============ -->
+  <div class="section" id="section-kimi_a">
+    <div class="exam-header">
+      <div class="exam-title-block">
+        <h2>📘 统计学 · Kimi A 卷</h2>
+        <div class="source">文件：exam/统计学_Kimi_A.pdf</div>
+      </div>
+      <div>
+        <a class="download-btn" href="exam/统计学_Kimi_A.pdf" download>
+          <svg viewBox="0 0 24 24"><path d="M5 20h14v-2H5v2zM19 9h-4V3H9v6H5l7 7 7-7z"/></svg>
+          下载 PDF
+        </a>
+      </div>
+    </div>
+    <div class="meta-row">
+      <span class="meta-badge">📄 PDF 格式</span>
+      <span class="meta-badge">🌙 Kimi</span>
+      <span class="meta-badge purple">A 卷</span>
+      <span class="meta-badge">~173 KB</span>
+    </div>
+    <div class="pdf-slot" data-pdf="exam/统计学_Kimi_A.pdf"></div>
+  </div>
+
+  <!-- ============ Kimi B ============ -->
+  <div class="section" id="section-kimi_b">
+    <div class="exam-header">
+      <div class="exam-title-block">
+        <h2>📘 统计学 · Kimi B 卷</h2>
+        <div class="source">文件：exam/统计学_Kimi_B.pdf</div>
+      </div>
+      <div>
+        <a class="download-btn" href="exam/统计学_Kimi_B.pdf" download>
+          <svg viewBox="0 0 24 24"><path d="M5 20h14v-2H5v2zM19 9h-4V3H9v6H5l7 7 7-7z"/></svg>
+          下载 PDF
+        </a>
+      </div>
+    </div>
+    <div class="meta-row">
+      <span class="meta-badge">📄 PDF 格式</span>
+      <span class="meta-badge">🌙 Kimi</span>
+      <span class="meta-badge purple">B 卷</span>
+      <span class="meta-badge">~221 KB</span>
+    </div>
+    <div class="pdf-slot" data-pdf="exam/统计学_Kimi_B.pdf"></div>
+  </div>
+
+  <!-- ============ GLM A ============ -->
+  <div class="section" id="section-glm_a">
+    <div class="exam-header">
+      <div class="exam-title-block">
+        <h2>📘 统计学 · GLM A 卷</h2>
+        <div class="source">文件：exam/统计学_GLM_A.pdf</div>
+      </div>
+      <div>
+        <a class="download-btn" href="exam/统计学_GLM_A.pdf" download>
+          <svg viewBox="0 0 24 24"><path d="M5 20h14v-2H5v2zM19 9h-4V3H9v6H5l7 7 7-7z"/></svg>
+          下载 PDF
+        </a>
+      </div>
+    </div>
+    <div class="meta-row">
+      <span class="meta-badge">📄 PDF 格式</span>
+      <span class="meta-badge green">⚡ GLM</span>
+      <span class="meta-badge purple">A 卷</span>
+      <span class="meta-badge">~208 KB</span>
+    </div>
+    <div class="pdf-slot" data-pdf="exam/统计学_GLM_A.pdf"></div>
+  </div>
+
+  <!-- ============ GLM B ============ -->
+  <div class="section" id="section-glm_b">
+    <div class="exam-header">
+      <div class="exam-title-block">
+        <h2>📘 统计学 · GLM B 卷</h2>
+        <div class="source">文件：exam/统计学_GLM_B.pdf</div>
+      </div>
+      <div>
+        <a class="download-btn" href="exam/统计学_GLM_B.pdf" download>
+          <svg viewBox="0 0 24 24"><path d="M5 20h14v-2H5v2zM19 9h-4V3H9v6H5l7 7 7-7z"/></svg>
+          下载 PDF
+        </a>
+      </div>
+    </div>
+    <div class="meta-row">
+      <span class="meta-badge">📄 PDF 格式</span>
+      <span class="meta-badge green">⚡ GLM</span>
+      <span class="meta-badge purple">B 卷</span>
+      <span class="meta-badge">~205 KB</span>
+    </div>
+    <div class="pdf-slot" data-pdf="exam/统计学_GLM_B.pdf"></div>
+  </div>
+
+  <!-- ============ 千问 ============ -->
+  <div class="section" id="section-qianwen">
+    <div class="exam-header">
+      <div class="exam-title-block">
+        <h2>📘 统计学 · 通义千问 出题</h2>
+        <div class="source">文件：exam/统计学_千问.pdf</div>
+      </div>
+      <div>
+        <a class="download-btn" href="exam/统计学_千问.pdf" download>
+          <svg viewBox="0 0 24 24"><path d="M5 20h14v-2H5v2zM19 9h-4V3H9v6H5l7 7 7-7z"/></svg>
+          下载 PDF
+        </a>
+      </div>
+    </div>
+    <div class="meta-row">
+      <span class="meta-badge">📄 PDF 格式</span>
+      <span class="meta-badge gold">🌀 通义千问</span>
+      <span class="meta-badge">~143 KB</span>
+    </div>
+    <div class="pdf-slot" data-pdf="exam/统计学_千问.pdf"></div>
+  </div>
+
+    <!-- ============ Minimax ============ -->
+  <div class="section" id="section-minimax">
+    <div class="exam-header">
+      <div class="exam-title-block">
+        <h2>📘 统计学 · Minimax 出题</h2>
+        <div class="source">文件：exam/统计学_Minimax.pdf</div>
+      </div>
+      <div>
+        <a class="download-btn" href="exam/统计学_Minimax.pdf" download>
+          <svg viewBox="0 0 24 24"><path d="M5 20h14v-2H5v2zM19 9h-4V3H9v6H5l7 7 7-7z"/></svg>
+          下载 PDF
+        </a>
+      </div>
+    </div>
+    <div class="meta-row">
+      <span class="meta-badge">📄 PDF 格式</span>
+      <span class="meta-badge green">🤖 Minimax</span>
+      <span class="meta-badge">~180 KB</span>
+    </div>
+    <div class="pdf-slot" data-pdf="exam/统计学_Minimax.pdf"></div>
+  </div>
+</div>
+
+<script>
+  // 懒加载：只有当目标 section 激活时，才把对应 PDF 注入到 .pdf-slot 中。
+  // 已加载过的 slot 会保留 iframe（display:none 不会卸载），切换回来无需重新拉取。
+  function ensurePdfLoaded(sectionEl) {
+    if (!sectionEl) return;
+    const slot = sectionEl.querySelector('.pdf-slot');
+    if (!slot || slot.classList.contains('loaded')) return;
+    const src = slot.dataset.pdf;
+    if (!src) return;
+    const title = sectionEl.querySelector('h2')?.textContent?.trim() || 'PDF 预览';
+    const iframe = document.createElement('iframe');
+    iframe.className = 'pdf-viewer';
+    iframe.src = src;
+    iframe.title = title;
+    iframe.loading = 'lazy';
+    slot.appendChild(iframe);
+    slot.classList.add('loaded');
+  }
+
+  function switchTab(id) {
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    const btn = document.querySelector(`.nav-tab[data-tab="${id}"]`);
+    const sec = document.getElementById('section-' + id);
+    if (btn) btn.classList.add('active');
+    if (sec) {
+      sec.classList.add('active');
+      ensurePdfLoaded(sec);
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  document.querySelectorAll('.nav-tab').forEach(tab => {
+    tab.addEventListener('click', () => switchTab(tab.dataset.tab));
+  });
+
+  // 首次加载：当前激活的 section 若带 PDF 也会按需注入（默认 overview 无 PDF，不会加载）
+  document.addEventListener('DOMContentLoaded', () => {
+    const initial = document.querySelector('.section.active');
+    if (initial) ensurePdfLoaded(initial);
+  });
+</script>
+
+</body>
+</html>

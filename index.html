@@ -491,7 +491,7 @@
     .q-answer.shown { display: block; animation: fadeIn 0.3s ease; }
     .q-answer .label { color: #888; font-weight: 400; margin-right: 6px; }
 
-    /* ── 右侧悬浮目录导航（完全透明背景 + 同步滚动）── */
+    /* ── 右侧悬浮目录导航 ── */
     .toc {
       position: fixed;
       top: 100px;
@@ -499,7 +499,17 @@
       width: 220px;
       max-height: calc(100vh - 140px);
       z-index: 50;
-      display: none;
+    }
+    /* 移动端：贴边手柄 + 抽屉式 */
+    @media (max-width: 768px) {
+      .toc {
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: auto;
+        max-height: none;
+        pointer-events: none; /* 手柄之外的区域不接收事件 */
+      }
     }
 
     .toc-header {
@@ -567,13 +577,144 @@
     .toc-item.lv-1:first-child { margin-top: 0; }
     .toc-item.lv-2 { padding-left: 22px; font-size: 12.5px; }
 
-    /* 移动端尺寸适配 */
+    /* ── 移动端：右侧贴边手柄 + 抽屉式目录 ── */
     @media (max-width: 768px) {
-      .toc { right: 8px; top: 76px; width: 160px; }
-      .toc-header { font-size: 11px; padding: 4px 4px 6px; }
-      .toc-item { font-size: 12px; padding: 6px 8px; }
-      .toc-item.lv-1 { font-size: 12.5px; }
-      .toc-item.lv-2 { padding-left: 16px; font-size: 11.5px; }
+      /* 手柄：贴右边竖条 */
+      .toc-rail {
+        position: absolute;
+        top: 50%;
+        right: 0;
+        transform: translateY(-50%);
+        width: 14px;
+        height: 90px;
+        background: rgba(192, 57, 43, 0.55);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border-radius: 8px 0 0 8px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        cursor: pointer;
+        pointer-events: auto;
+        z-index: 2;
+        overflow: hidden;
+        transition: background 0.2s ease, width 0.25s ease;
+      }
+      .toc-rail:hover, .toc-rail.open { background: rgba(192, 57, 43, 0.8); width: 18px; }
+      .toc-rail::before {
+        content: '‹';
+        color: #fff;
+        font-size: 14px;
+        line-height: 1;
+        font-weight: 700;
+        animation: railPulse 2s ease-in-out infinite;
+      }
+      .toc-rail.open::before { content: '›'; }
+      @keyframes railPulse {
+        0%, 100% { transform: translateX(0); opacity: 0.8; }
+        50% { transform: translateX(-2px); opacity: 1; }
+      }
+      .toc-rail-ticks {
+        position: absolute;
+        right: 4px;
+        top: 0;
+        bottom: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        padding: 8px 0;
+        pointer-events: none;
+      }
+      .toc-rail-tick {
+        width: 4px;
+        height: 2px;
+        background: rgba(255,255,255,0.4);
+        border-radius: 1px;
+        transition: background 0.2s ease, width 0.2s ease;
+      }
+      .toc-rail-tick.active {
+        background: #fff;
+        width: 6px;
+      }
+
+      /* 抽屉面板：默认隐藏 */
+      .toc-drawer {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 240px;
+        background: rgba(255, 254, 251, 0.96);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        box-shadow: -4px 0 24px rgba(0,0,0,0.12);
+        transform: translateX(100%);
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        display: flex;
+        flex-direction: column;
+        pointer-events: auto;
+        z-index: 1;
+      }
+      .toc-drawer.open { transform: translateX(0); }
+
+      .toc-drawer-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 16px;
+        border-bottom: 1px solid rgba(0,0,0,0.06);
+        font-family: 'Noto Serif SC', serif;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--red);
+        letter-spacing: 2px;
+      }
+      .toc-drawer-close {
+        background: none;
+        border: none;
+        font-size: 18px;
+        color: #888;
+        cursor: pointer;
+        padding: 0 4px;
+        line-height: 1;
+      }
+      .toc-drawer-close:hover { color: var(--red); }
+
+      /* 遮罩 */
+      .toc-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.3);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease;
+        z-index: 0;
+      }
+      .toc-overlay.open { opacity: 1; pointer-events: auto; }
+
+      /* 列表样式适配抽屉 */
+      .toc-list {
+        flex: 1;
+        overflow-y: auto;
+        padding: 8px 8px;
+        background: transparent;
+        scroll-behavior: smooth;
+      }
+      .toc-list::-webkit-scrollbar { width: 4px; }
+      .toc-list::-webkit-scrollbar-thumb { background: rgba(192,57,43,0.3); border-radius: 2px; }
+
+      /* 隐藏电脑端常驻列表（手机端只用抽屉里的 toc-list-mobile） */
+      #tocList { display: none !important; }
+      .toc-header { display: none; }
+      .toc-item { font-size: 13px; padding: 8px 12px; }
+      .toc-item.lv-1 { font-size: 13.5px; margin-top: 10px; padding: 8px 12px; }
+      .toc-item.lv-2 { padding-left: 24px; font-size: 12.5px; }
+    }
+    /* 电脑端隐藏手柄/抽屉/遮罩 */
+    @media (min-width: 769px) {
+      .toc-rail, .toc-drawer, .toc-overlay { display: none !important; }
     }
 
     /* ── 锚点滚动偏移（避开 sticky header）── */
@@ -685,28 +826,57 @@
     }
     .md-error strong { display: block; margin-bottom: 6px; }
 
-    /* ── Mobile Toggle ── */
+    /* ── Mobile Toggle (左侧贴边手柄，样式与右侧 toc-rail 对称) ── */
     .mobile-toggle {
       display: none;
       position: fixed;
-      bottom: 20px;
-      left: 20px;
-      width: 50px;
-      height: 50px;
-      background: var(--red);
-      color: #fff;
+      top: 50%;
+      left: 0;
+      transform: translateY(-50%);
+      width: 14px;
+      height: 90px;
+      background: rgba(192, 57, 43, 0.55);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
       border: none;
-      border-radius: 50%;
-      font-size: 20px;
+      border-radius: 0 8px 8px 0;
+      color: #fff;
       cursor: pointer;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-      z-index: 1000;
-      transition: transform 0.2s;
+      z-index: 60;
+      overflow: hidden;
+      transition: background 0.2s ease, width 0.25s ease;
+      align-items: center;
+      justify-content: center;
     }
-
-    .mobile-toggle:hover {
-      transform: scale(1.1);
+    .mobile-toggle::before {
+      content: '›';
+      color: #fff;
+      font-size: 14px;
+      line-height: 1;
+      font-weight: 700;
+      animation: railPulseLeft 2s ease-in-out infinite;
     }
+    .mobile-toggle.open::before { content: '‹'; }
+    @keyframes railPulseLeft {
+      0%, 100% { transform: translateX(0); opacity: 0.8; }
+      50%      { transform: translateX(2px); opacity: 1; }
+    }
+    .mobile-toggle:hover,
+    .mobile-toggle.open {
+      background: rgba(192, 57, 43, 0.8);
+      width: 18px;
+    }
+    /* 左侧 sidebar 唤出时的遮罩 */
+    .sidebar-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.3);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      z-index: 998;
+    }
+    .sidebar-overlay.open { opacity: 1; pointer-events: auto; }
 
     /* ── Responsive ── */
     @media (max-width: 768px) {
@@ -854,16 +1024,28 @@
     </div>
   </div>
 
-  <!-- 右侧悬浮目录（透明背景 + 同步滚动） -->
+  <!-- 右侧悬浮目录（电脑端常驻 / 移动端贴边手柄 + 抽屉） -->
   <aside class="toc" id="toc" aria-label="本页目录">
+    <!-- 电脑端直接展示 -->
     <div class="toc-header">本页目录</div>
     <nav class="toc-list" id="tocList"></nav>
+    <!-- 移动端手柄 + 抽屉 -->
+    <div class="toc-rail" id="tocRail" tabindex="0" aria-label="打开目录">
+      <div class="toc-rail-ticks" id="tocRailTicks"></div>
+    </div>
+    <div class="toc-drawer" id="tocDrawer">
+      <div class="toc-drawer-header">
+        <span>本页目录</span>
+        <button class="toc-drawer-close" id="tocDrawerClose" aria-label="关闭目录">×</button>
+      </div>
+      <nav class="toc-list toc-list-mobile" id="tocListMobile"></nav>
+    </div>
+    <div class="toc-overlay" id="tocOverlay"></div>
   </aside>
 
-  <!-- Mobile Toggle Button -->
-  <button class="mobile-toggle" id="mobileToggle" onclick="toggleSidebar()">
-    ☰
-  </button>
+  <!-- 左侧贴边手柄（唤出 sidebar），样式与右侧 toc-rail 对称 -->
+  <button class="mobile-toggle" id="mobileToggle" aria-label="打开章节导航" tabindex="0"></button>
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
   <script>
     // ══════════════════════════════════════════════
@@ -1094,7 +1276,11 @@
           navItem.className = 'nav-item';
           navItem.dataset.id = unit.id;
           navItem.dataset.title = unit.title;
-          navItem.onclick = () => loadUnit(unit.id);
+          navItem.onclick = () => {
+            loadUnit(unit.id);
+            // 手机端：点击导航项后自动关闭 sidebar
+            if (window.innerWidth <= 768) closeSidebar();
+          };
 
           navItem.innerHTML = `
             <div class="nav-icon">${unit.icon}</div>
@@ -1229,7 +1415,11 @@
     function buildTOC(root) {
       const toc = document.getElementById('toc');
       const list = document.getElementById('tocList');
+      const listMobile = document.getElementById('tocListMobile');
+      const railTicks = document.getElementById('tocRailTicks');
       list.innerHTML = '';
+      listMobile.innerHTML = '';
+      railTicks.innerHTML = '';
 
       // 提取 h1、h2，给它们添加 id
       const headings = root.querySelectorAll('h1, h2');
@@ -1248,6 +1438,7 @@
 
       tocHeadings.forEach(h => {
         const level = parseInt(h.tagName.substring(1)); // 1 or 2
+        // 电脑端条目
         const a = document.createElement('a');
         a.className = 'toc-item lv-' + level;
         a.textContent = h.textContent.trim();
@@ -1259,10 +1450,35 @@
           if (target) {
             target.scrollIntoView({ behavior: 'smooth', block: 'start' });
             setActiveTocItem(h.id);
+            // 移动端点击后关闭抽屉
+            closeTocDrawer();
           }
         });
         list.appendChild(a);
         tocItems.push(a);
+
+        // 移动端条目（克隆样式，独立节点）
+        const am = document.createElement('a');
+        am.className = 'toc-item lv-' + level;
+        am.textContent = h.textContent.trim();
+        am.href = '#' + h.id;
+        am.dataset.target = h.id;
+        am.addEventListener('click', (e) => {
+          e.preventDefault();
+          const target = document.getElementById(h.id);
+          if (target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            setActiveTocItem(h.id);
+            closeTocDrawer();
+          }
+        });
+        listMobile.appendChild(am);
+
+        // 手柄刻度
+        const tick = document.createElement('div');
+        tick.className = 'toc-rail-tick';
+        tick.dataset.target = h.id;
+        railTicks.appendChild(tick);
       });
 
       // 初始化：第一个高亮
@@ -1275,8 +1491,14 @@
     function setActiveTocItem(id) {
       const idx = tocHeadings.findIndex(h => h.id === id);
       if (idx === -1) return;
-      // 高亮
+      // 高亮（电脑端 + 移动端 + 手柄）
       tocItems.forEach((item, i) => item.classList.toggle('active', i === idx));
+      const listMobile = document.getElementById('tocListMobile');
+      const mobileItems = listMobile ? Array.from(listMobile.children) : [];
+      mobileItems.forEach((item, i) => item.classList.toggle('active', i === idx));
+      const ticks = document.querySelectorAll('.toc-rail-tick');
+      ticks.forEach((t, i) => t.classList.toggle('active', i === idx));
+
       // 让目录滚动条移动到当前项（保持当前项居中）
       const list = document.getElementById('tocList');
       const item = tocItems[idx];
@@ -1286,6 +1508,15 @@
         const listHeight = list.clientHeight;
         const target = itemTop - listHeight / 2 + itemHeight / 2;
         list.scrollTo({ top: Math.max(0, target), behavior: 'smooth' });
+      }
+      if (listMobile) {
+        const m = mobileItems[idx];
+        if (m) {
+          const itemTop = m.offsetTop;
+          const itemHeight = m.offsetHeight;
+          const listHeight = listMobile.clientHeight;
+          listMobile.scrollTo({ top: Math.max(0, itemTop - listHeight / 2 + itemHeight / 2), behavior: 'smooth' });
+        }
       }
     }
 
@@ -1316,6 +1547,107 @@
     }
     // 首次加载时绑定一次（mdViewer 在 DOM 中已存在）
     bindTocScroll();
+
+    // ══════════════════════════════════════════════
+    // 移动端：右侧贴边手柄 + 抽屉
+    // ══════════════════════════════════════════════
+    const tocRail      = document.getElementById('tocRail');
+    const tocDrawer    = document.getElementById('tocDrawer');
+    const tocOverlay   = document.getElementById('tocOverlay');
+    const tocDrawerX   = document.getElementById('tocDrawerClose');
+
+    function openTocDrawer() {
+      if (!tocDrawer) return;
+      tocDrawer.classList.add('open');
+      tocOverlay.classList.add('open');
+      if (tocRail) tocRail.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeTocDrawer() {
+      if (!tocDrawer) return;
+      tocDrawer.classList.remove('open');
+      tocOverlay.classList.remove('open');
+      if (tocRail) tocRail.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+    // 暴露给上面点击回调用
+    window.closeTocDrawer = closeTocDrawer;
+
+    if (tocRail) {
+      tocRail.addEventListener('click', () => {
+        if (tocDrawer.classList.contains('open')) closeTocDrawer();
+        else openTocDrawer();
+      });
+      tocRail.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); tocRail.click(); }
+      });
+    }
+    if (tocDrawerX) tocDrawerX.addEventListener('click', closeTocDrawer);
+    if (tocOverlay) tocOverlay.addEventListener('click', closeTocDrawer);
+
+    // 手柄拖动 / 滑动手势
+    (function attachRailSwipe() {
+      if (!tocRail) return;
+      let startX = 0, startY = 0, dragging = false;
+      const THRESHOLD = 40;
+
+      tocRail.addEventListener('touchstart', (e) => {
+        const t = e.touches[0];
+        startX = t.clientX; startY = t.clientY; dragging = true;
+      }, { passive: true });
+
+      tocRail.addEventListener('touchend', (e) => {
+        if (!dragging) return;
+        dragging = false;
+        const t = e.changedTouches[0];
+        const dx = t.clientX - startX;
+        const dy = Math.abs(t.clientY - startY);
+        if (dy > 60) return; // 垂直方向忽略
+        if (dx < -THRESHOLD) openTocDrawer(); // 左滑打开
+        else if (dx > THRESHOLD) closeTocDrawer(); // 右滑关闭
+      }, { passive: true });
+
+      // 抽屉内右滑关闭
+      if (tocDrawer) {
+        let dx = 0;
+        tocDrawer.addEventListener('touchstart', (e) => {
+          startX = e.touches[0].clientX;
+          startY = e.touches[0].clientY;
+        }, { passive: true });
+        tocDrawer.addEventListener('touchmove', (e) => {
+          const t = e.touches[0];
+          dx = t.clientX - startX;
+          const dy = Math.abs(t.clientY - startY);
+          if (dy < 40 && dx > 0 && startX > 180) {
+            // 仅允许抽屉右半区域右滑生效
+          }
+        }, { passive: true });
+        tocDrawer.addEventListener('touchend', (e) => {
+          const t = e.changedTouches[0];
+          const ddx = t.clientX - startX;
+          const ddy = Math.abs(t.clientY - startY);
+          if (ddy < 40 && ddx > 60) closeTocDrawer();
+        }, { passive: true });
+      }
+    })();
+
+    const mobileToggleBtn = document.getElementById('mobileToggle');
+    if (mobileToggleBtn) {
+      mobileToggleBtn.addEventListener('click', toggleSidebar);
+      mobileToggleBtn.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleSidebar(); }
+      });
+    }
+
+    // Esc 关闭抽屉
+    document.addEventListener('keydown', (e) => {
+      if (e.key !== 'Escape') return;
+      if (typeof closeTocDrawer === 'function' && tocDrawer && tocDrawer.classList.contains('open')) {
+        closeTocDrawer();
+      } else {
+        closeSidebar();
+      }
+    });
 
     // ══════════════════════════════════════════════
     // 键盘导航
@@ -1360,10 +1692,24 @@
     // ══════════════════════════════════════════════
     // 移动端侧边栏切换
     // ══════════════════════════════════════════════
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
     function toggleSidebar() {
       const sidebar = document.getElementById('sidebar');
-      sidebar.classList.toggle('open');
+      const toggle = document.getElementById('mobileToggle');
+      const isOpen = sidebar.classList.toggle('open');
+      if (sidebarOverlay) sidebarOverlay.classList.toggle('open', isOpen);
+      if (toggle) toggle.classList.toggle('open', isOpen);
+      // 互斥：sidebar 打开时关闭右侧 toc 抽屉
+      if (isOpen && typeof closeTocDrawer === 'function') closeTocDrawer();
     }
+    function closeSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const toggle = document.getElementById('mobileToggle');
+      sidebar.classList.remove('open');
+      if (sidebarOverlay) sidebarOverlay.classList.remove('open');
+      if (toggle) toggle.classList.remove('open');
+    }
+    if (sidebarOverlay) sidebarOverlay.addEventListener('click', closeSidebar);
 
     // ══════════════════════════════════════════════
     // 侧边栏折叠/展开

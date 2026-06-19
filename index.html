@@ -946,10 +946,11 @@
     // 同时美化题目编号和选项
     // ══════════════════════════════════════════════
     function processQuestions(root) {
-      // 1) 遍历所有 <p>，将"参考答案："行替换为按钮 + 隐藏的答案块
-      // 遍历两次以处理 answer 行与题干分离的情况
-      const paragraphs = Array.from(root.querySelectorAll('p'));
+      // 注：marked GFM 模式下，"1. xxx" 会渲染成 <ol><li>...</li></ol>，不是 <p>
+      // 所以同时处理 <p> 和 <li>
+      const paragraphs = Array.from(root.querySelectorAll('p, li'));
 
+      // 1) 遍历所有段落，将"参考答案："行替换为按钮 + 隐藏的答案块
       paragraphs.forEach(p => {
         const text = p.textContent;
         // 匹配 "参考答案：xxx"（可能带空白）
@@ -959,7 +960,6 @@
         const answer = m[1].trim();
         if (!answer) return;
 
-        // 找到上一个非空段落（即题目或选项所在的段落），将按钮插入其后
         const answerEl = document.createElement('div');
         answerEl.className = 'q-answer';
         answerEl.innerHTML = `<span class="label">参考答案</span>${escapeHtml(answer)}`;
@@ -980,14 +980,15 @@
         p.appendChild(answerEl);
       });
 
-      // 调试：报告按钮数量
-      console.log('[processQuestions] 答案按钮数量:', root.querySelectorAll('.q-toggle').length);
-
-      // 2) 美化题目编号和选项
+      // 2) 美化题目编号
+      // md 预处理时已把 "1. xxx" 替换为 "1\x01 xxx"，所以此处识别 \x01 + 数字
       paragraphs.forEach(p => {
+        // 跳过已经处理过的（参考答案块、按钮）
+        if (p.querySelector('.q-toggle') || p.querySelector('.q-answer')) return;
+
         const html = p.innerHTML;
-        // 题目编号："1、" 或 "1. " 开头
-        const numMatch = html.match(/^(\s*)(\d+)\s*[、.]\s*/);
+        // 题目编号："1\x01" 或 "1\x01 " 开头（md 预处理后的格式）
+        const numMatch = html.match(/^(\s*)(\d+)\x01\s*/);
         if (numMatch) {
           const num = numMatch[2];
           p.innerHTML = html.replace(
@@ -997,35 +998,45 @@
         }
       });
 
-      // 3) 将连续的 A./B./C. 选项拆成独立块（同一段落内）
+      // 3) 美化选项：将 A. B. C. 等字母单独加粗红色
+      //    - 一行多个选项时，拆成独立 <span>
+      //    - 单个选项时，把字母部分用 <strong> 包裹
       paragraphs.forEach(p => {
+        if (p.tagName !== 'P') return;
         if (p.querySelector('.q-toggle') || p.querySelector('.q-answer')) return;
-        // 仅当段落包含至少 2 个 "X . " 形式时才处理
         const text = p.textContent;
+        // 必须包含 A./B./C. 形式
         const optMatches = text.match(/[A-N]\s*\.\s*/g);
-        if (!optMatches || optMatches.length < 2) return;
+        if (!optMatches) return;
 
-        // 按选项切分
-        const parts = p.innerHTML.split(/(?=[A-N]\s*\.\s*)/);
-        const wrapper = document.createElement('div');
-        wrapper.className = 'q-options';
+        if (optMatches.length >= 2) {
+          // 多个选项：拆成独立块
+          const parts = p.innerHTML.split(/(?=[A-N]\s*\.\s*)/);
+          const wrapper = document.createElement('div');
+          wrapper.className = 'q-options';
 
-        parts.forEach(part => {
-          const optMatch = part.match(/^\s*([A-N])\s*\.\s*([\s\S]*)/);
-          if (optMatch) {
-            const optEl = document.createElement('span');
-            optEl.className = 'opt';
-            optEl.innerHTML = `<strong>${optMatch[1]}.</strong> ${optMatch[2].trim()}`;
-            wrapper.appendChild(optEl);
-          } else if (part.trim()) {
-            // 题目题干部分
-            const stemEl = document.createElement('div');
-            stemEl.innerHTML = part;
-            wrapper.appendChild(stemEl);
-          }
-        });
+          parts.forEach(part => {
+            const optMatch = part.match(/^\s*([A-N])\s*\.\s*([\s\S]*)/);
+            if (optMatch) {
+              const optEl = document.createElement('span');
+              optEl.className = 'opt';
+              optEl.innerHTML = `<strong>${optMatch[1]}.</strong> ${optMatch[2].trim()}`;
+              wrapper.appendChild(optEl);
+            } else if (part.trim()) {
+              const stemEl = document.createElement('div');
+              stemEl.innerHTML = part;
+              wrapper.appendChild(stemEl);
+            }
+          });
 
-        p.replaceWith(wrapper);
+          p.replaceWith(wrapper);
+        } else {
+          // 单个选项：仅把字母部分用 <strong> 包裹
+          p.innerHTML = p.innerHTML.replace(
+            /^(\s*)([A-N])\s*\.\s*/,
+            `$1<strong>$2.</strong> `
+          );
+        }
       });
     }
 
@@ -1147,7 +1158,11 @@
           throw new Error(`HTTP ${res.status} ${res.statusText}`);
         }
         const md = await res.text();
-        const html = marked.parse(md);
+        // 预处理：把"1. xxx"或"1.xxx"形式打断（marked GFM 默认会把"1. xxx"解析成<ol><li>）
+        // 但我们想让"1."作为题号渲染成红色圆圈，所以用零宽字符替换点号，让 marked 识别为普通段落
+        // 兼容"1.（ ）xxx"（点号后无空格）和"1. xxx"（点号+空格）两种格式
+        const mdProcessed = md.replace(/^(\s*)(\d+)\.(?=\s|（|\(|（|$)/gm, '$1$2\x01');
+        const html = marked.parse(mdProcessed);
         const safe = DOMPurify.sanitize(html);
 
         // 缓存渲染后的 HTML

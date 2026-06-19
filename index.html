@@ -895,8 +895,9 @@
 
       .sidebar {
         position: fixed;
-        left: -100%;
+        left: -100vw;
         top: 60px;
+        width: min(var(--sidebar-width), 100vw);
         height: calc(100vh - 60px);
         z-index: 999;
         transition: left 0.3s ease;

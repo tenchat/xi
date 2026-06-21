@@ -306,6 +306,13 @@
       .md-viewer { padding-right: 180px; }
     }
 
+    /* 独立页面：去掉 padding，让 iframe 铺满 md-viewer 整个区域 */
+    .md-viewer.has-iframe {
+      padding: 0 !important;
+      overflow: hidden;
+    }
+    .md-viewer.has-iframe::-webkit-scrollbar { display: none; }
+
     /* ── Loading State ── */
     .loading {
       position: absolute;
@@ -434,6 +441,18 @@
     .md p { margin: 10px 0; }
     .md strong { color: var(--red); font-weight: 600; }
     .md em { color: var(--green); }
+
+    /* ── 独立页面（iframe）样式 ── */
+    .standalone-iframe {
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: var(--bg);
+    }
 
     /* ── 题目样式 ── */
     .md p:has(.q-num) { line-height: 1.9; }
@@ -773,12 +792,17 @@
       margin: 24px 0;
     }
 
+    .md .table-wrapper {
+      overflow-x: auto;
+      margin: 14px 0;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
     .md table {
       width: 100%;
+      min-width: max-content;
       border-collapse: collapse;
-      margin: 14px 0;
       background: var(--paper);
-      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
     }
     .md th {
       background: var(--red);
@@ -787,11 +811,13 @@
       text-align: left;
       font-weight: 500;
       font-size: 14px;
+      white-space: nowrap;
     }
     .md td {
       padding: 9px 12px;
       border-bottom: 1px solid var(--border);
       font-size: 14px;
+      white-space: nowrap;
     }
     .md tr:nth-child(even) td { background: var(--bg); }
 
@@ -1060,8 +1086,9 @@
       { id: 'note4',     group: '复习笔记', title: '复习笔记 四', file: 'unit/note4.md',     icon: '4' },
       { id: 'note5',     group: '复习笔记', title: '复习笔记 五', file: 'unit/note5.md',     icon: '5' },
       { id: 'note6',     group: '复习笔记', title: '复习笔记 六', file: 'unit/note6.md',     icon: '6' },
-      { id: 'note7',     group: '复习笔记', title: '毛概复习笔记 一', file: 'unit/mao1.md',     icon: '7' },
-      { id: 'note8',     group: '复习笔记', title: '毛概复习笔记 二', file: 'unit/mao2.md',     icon: '8' },
+      { id: 'mindmap',   group: '思维导图', title: '思维导图', file: 'unit/mind.html',     icon: '7', standalone: true },
+      { id: 'note7',     group: '复习笔记', title: '毛概复习笔记 一', file: 'unit/mao1.md',     icon: '8' },
+      { id: 'note8',     group: '复习笔记', title: '毛概复习笔记 二', file: 'unit/mao2.md',     icon: '9' },
       { id: 'question1', group: '练习题',   title: '练习题 一',   file: 'unit/question1.md', icon: 'Q' },
       { id: 'question2', group: '练习题',   title: '练习题 二',   file: 'unit/question2.md', icon: 'Q' },
     ];
@@ -1324,11 +1351,16 @@
       document.getElementById('mdViewer').style.display = 'none';
 
       // 检查缓存
-      if (contentCache[unitId]) {
-        showContent(unitId, contentCache[unitId]);
-      } else {
+    if (contentCache[unitId]) {
+      // 独立页面缓存命中也要走 iframe 流程
+      if (contentCache[unitId].__standalone) {
         loadMarkdown(unit);
+      } else {
+        showContent(unitId, contentCache[unitId]);
       }
+    } else {
+      loadMarkdown(unit);
+    }
 
       // 移动端关闭侧边栏
       if (window.innerWidth <= 768) {
@@ -1337,20 +1369,77 @@
     }
 
     // ══════════════════════════════════════════════
+    // Markdown 预处理：修复表格、题号等格式
+    // ══════════════════════════════════════════════
+    function preprocessMarkdown(md) {
+      let processed = md;
+
+      // 1) 修复 GFM 表格：删除表格行之间的空行
+      //    表格行特征：以 | 开头并以 | 结尾（忽略首尾空白）
+      const lines = processed.split('\n');
+      const out = [];
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i];
+        out.push(line);
+        if (
+          i + 2 < lines.length &&
+          /^[ \t]*\|.*\|[ \t]*$/.test(line) &&
+          /^[ \t]*$/.test(lines[i + 1]) &&
+          /^[ \t]*\|.*\|[ \t]*$/.test(lines[i + 2])
+        ) {
+          i++; // 跳过中间的空白行
+        }
+      }
+      processed = out.join('\n');
+
+      // 2) 打断"1. xxx"形式的有序列表：把"1."替换为"1\x01"
+      //    兼容"1. xxx"、"1.（ ）xxx"、"1.xxx"等多种题号格式
+      processed = processed.replace(/^(\s*)(\d+)\.(?=\s|（|\(|（|$)/gm, '$1$2\x01');
+
+      return processed;
+    }
+
+    // ══════════════════════════════════════════════
     // 加载并渲染 Markdown
     // ══════════════════════════════════════════════
     async function loadMarkdown(unit) {
       const target = document.getElementById('mdContent');
+      const viewer = document.getElementById('mdViewer');
+
+      // 独立页面：用 iframe 加载，避免与本页 md 渲染冲突
+      if (unit.standalone) {
+        // 清空 mdContent，注入 iframe
+        target.innerHTML = '';
+        const iframe = document.createElement('iframe');
+        iframe.src = unit.file;
+        iframe.className = 'standalone-iframe';
+        iframe.title = unit.title;
+        iframe.setAttribute('frameborder', '0');
+        target.appendChild(iframe);
+
+        // 给 md-viewer 加 class，移除 padding 与滚动条，让 iframe 真正铺满
+        viewer.classList.add('has-iframe');
+
+        // 缓存标记（一个特殊对象表示独立页面已加载）
+        contentCache[unit.id] = { __standalone: true, file: unit.file };
+
+        // 隐藏右侧本页目录（独立页面自带目录）
+        const toc = document.getElementById('toc');
+        if (toc) toc.style.display = 'none';
+
+        // 显示 viewer 并滚动到顶部
+        document.getElementById('loading').style.display = 'none';
+        viewer.style.display = 'block';
+        return;
+      }
+
       try {
         const res = await fetch(unit.file);
         if (!res.ok) {
           throw new Error(`HTTP ${res.status} ${res.statusText}`);
         }
         const md = await res.text();
-        // 预处理：把"1. xxx"或"1.xxx"形式打断（marked GFM 默认会把"1. xxx"解析成<ol><li>）
-        // 但我们想让"1."作为题号渲染成红色圆圈，所以用零宽字符替换点号，让 marked 识别为普通段落
-        // 兼容"1.（ ）xxx"（点号后无空格）和"1. xxx"（点号+空格）两种格式
-        const mdProcessed = md.replace(/^(\s*)(\d+)\.(?=\s|（|\(|（|$)/gm, '$1$2\x01');
+        const mdProcessed = preprocessMarkdown(md);
         const html = marked.parse(mdProcessed);
         const safe = DOMPurify.sanitize(html);
 
@@ -1378,7 +1467,19 @@
     // ══════════════════════════════════════════════
     async function showContent(unitId, html) {
       const target = document.getElementById('mdContent');
+
+      // 清空上一个内容（包括可能残留的 standalone iframe）
+      target.innerHTML = '';
+
+      // 如果之前是独立页面，去掉 has-iframe class，恢复 padding 与滚动条
+      const viewer = document.getElementById('mdViewer');
+      viewer.classList.remove('has-iframe');
+
       target.innerHTML = html;
+
+      // 恢复右侧目录可见（可能被独立页面隐藏了）
+      const toc = document.getElementById('toc');
+      if (toc) toc.style.display = '';
 
       // 隐藏加载状态，显示内容
       document.getElementById('loading').style.display = 'none';
@@ -1389,6 +1490,14 @@
 
       // 处理题目：隐藏参考答案
       processQuestions(target);
+
+      // 把 table 包进可横向滚动的 wrapper（避免超宽表格撑破布局）
+      target.querySelectorAll('table').forEach(table => {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'table-wrapper';
+        table.parentNode.insertBefore(wrapper, table);
+        wrapper.appendChild(table);
+      });
 
       // 把 mermaid 代码块转换成图表容器
       const mermaidBlocks = extractMermaidBlocks(target);

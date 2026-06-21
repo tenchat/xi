@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>章节思维导图 · 各章知识图谱</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Noto+Sans+SC:wght@300;400;500;600&display=swap');
+
+    :root {
+      --ink: #1a1410;
+      --red: #c0392b;
+      --red-light: #f9edec;
+      --gold: #a07800;
+      --gold-light: #fdf8e8;
+      --blue: #c0392b;
+      --blue-light: #f9edec;
+      --green: #1a5c3a;
+      --green-light: #eaf5ef;
+      --purple: #5a3a7a;
+      --purple-light: #f0e8f5;
+      --border: #d4c8b8;
+      --bg: #faf8f4;
+      --paper: #fffefb;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body { height: 100%; overflow: hidden; }
+
+    body {
+      font-family: 'Noto Sans SC', 'PingFang SC', sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      font-size: 15px;
+      line-height: 1.85;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header {
+      display: none;
+    }
+    .header::before {
+      content: '';
+      position: absolute;
+      top: -50px; right: -50px;
+      width: 200px; height: 200px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+    }
+    .header h1 {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      position: relative; z-index: 1;
+    }
+    .header .subtitle {
+      margin-top: 4px;
+      color: rgba(255,255,255,0.75);
+      font-size: 12px;
+      letter-spacing: 1px;
+      position: relative; z-index: 1;
+    }
+    .header .ch {
+      display: inline-block;
+      background: rgba(255,255,255,0.15);
+      padding: 3px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      margin-right: 12px;
+      letter-spacing: 1px;
+    }
+
+    .nav {
+      background: var(--paper);
+      border-bottom: 2px solid var(--border);
+      padding: 0 16px;
+      display: flex;
+      gap: 4px;
+      overflow-x: auto;
+      flex-shrink: 0;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    }
+    .nav-tab {
+      padding: 12px 16px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--ink);
+      border: none;
+      background: transparent;
+      border-bottom: 3px solid transparent;
+      transition: all 0.2s;
+      white-space: nowrap;
+      font-family: inherit;
+    }
+    .nav-tab:hover { color: var(--blue); }
+    .nav-tab.active {
+      color: var(--red);
+      border-bottom-color: var(--red);
+      font-weight: 600;
+    }
+
+    /* ===== 画布区 ===== */
+    .stage {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+      background:
+        linear-gradient(rgba(0,0,0,0.025) 1px, transparent 1px) 0 0 / 24px 24px,
+        linear-gradient(90deg, rgba(0,0,0,0.025) 1px, transparent 1px) 0 0 / 24px 24px,
+        var(--bg);
+      cursor: grab;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: none;
+    }
+    .stage.dragging { cursor: grabbing; }
+
+    .canvas {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      /* canvas 负责居中 minder；缩放/平移由 svg viewBox 控制（无锯齿） */
+    }
+
+    .minder {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      /* minder 始终占满 stage；缩放通过修改 svg 自身的 viewBox 实现，
+         浏览器按最终像素矢量重渲染 → 无锯齿 */
+    }
+    .minder svg {
+      display: block;
+      width: 100%;
+      height: 100%;
+      pointer-events: auto;
+      /* 抗锯齿：几何精度优先（Chrome/Firefox 都支持） */
+      shape-rendering: geometricPrecision;
+      text-rendering: geometricPrecision;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      image-rendering: auto;
+    }
+
+    /* 加载占位 */
+    .placeholder {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      color: #999;
+      font-size: 14px;
+      letter-spacing: 1px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+    .spinner {
+      width: 36px; height: 36px;
+      border: 3px solid var(--blue-light);
+      border-top-color: var(--blue);
+      border-radius: 50%;
+      animation: spin 0.9s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .placeholder.error { color: var(--red); }
+    .placeholder.hidden { display: none; }
+
+    /* ===== 工具栏 ===== */
+    .toolbar {
+      position: absolute;
+      right: 20px;
+      bottom: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      background: var(--paper);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 6px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+      z-index: 10;
+    }
+    .tool-btn {
+      width: 40px; height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      border: none;
+      border-radius: 6px;
+      color: var(--ink);
+      cursor: pointer;
+      transition: all 0.15s;
+      font-family: inherit;
+    }
+    .tool-btn:hover { background: var(--blue-light); color: var(--blue); }
+    .tool-btn:active { background: var(--red-light); color: var(--red); }
+    .tool-btn svg { width: 20px; height: 20px; fill: currentColor; }
+    .tool-btn .badge {
+      position: absolute;
+      margin-top: -28px;
+      margin-left: 28px;
+      background: var(--ink);
+      color: #fff;
+      font-size: 11px;
+      padding: 1px 6px;
+      border-radius: 8px;
+      opacity: 0;
+      pointer-events: none;
+      white-space: nowrap;
+      transition: opacity 0.2s;
+    }
+    .tool-btn { position: relative; }
+    .tool-btn:hover .badge { opacity: 1; }
+
+    .tool-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 2px 4px;
+    }
+
+    /* ===== 顶部信息条 ===== */
+    .info-bar {
+      position: absolute;
+      left: 20px;
+      top: 20px;
+      background: var(--paper);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 14px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      font-size: 13px;
+      color: var(--ink);
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .info-bar .label {
+      color: var(--blue);
+      font-weight: 600;
+    }
+    .info-bar .zoom-val {
+      color: var(--red);
+      font-weight: 600;
+      min-width: 48px;
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ===== 缩略图导航 ===== */
+    .overview {
+      position: absolute;
+      right: 20px;
+      top: 20px;
+      width: 180px;
+      height: 130px;
+      background: var(--paper);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+      overflow: hidden;
+      z-index: 10;
+      cursor: crosshair;
+    }
+    .overview-inner {
+      position: absolute;
+      top: 0; left: 0;
+      transform-origin: 0 0;
+      will-change: transform;
+    }
+    .overview-inner svg { display: block; pointer-events: none; }
+    .overview-viewport {
+      position: absolute;
+      border: 2px solid var(--red);
+      background: rgba(192, 57, 43, 0.08);
+      pointer-events: none;
+      border-radius: 2px;
+    }
+
+    @media (max-width: 768px) {
+      .nav { padding: 0 8px; }
+      .nav-tab { padding: 10px 10px; font-size: 13px; }
+      .toolbar { right: 10px; bottom: 10px; }
+      .tool-btn { width: 36px; height: 36px; }
+      .info-bar { left: 10px; top: 10px; font-size: 12px; padding: 6px 10px; }
+      .overview { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <h1><span class="ch">思维导图</span>各章节知识图谱</h1>
+  <div class="subtitle">Mind Maps · Knowledge Graphs · Each Chapter</div>
+</div>
+
+<nav class="nav" id="navTabs">
+  <!-- 动态插入章节 tab -->
+</nav>
+
+<div class="stage" id="stage">
+  <div class="canvas" id="canvas"></div>
+
+  <div class="info-bar">
+    <span class="label" id="infoChapter">导论</span>
+    <span style="color:#bbb">·</span>
+    <span>缩放</span>
+    <span class="zoom-val" id="zoomVal">100%</span>
+  </div>
+
+  <div class="overview" id="overview" title="缩略图导航">
+    <div class="overview-inner" id="overviewInner"></div>
+    <div class="overview-viewport" id="overviewViewport"></div>
+  </div>
+
+  <div class="toolbar">
+    <button class="tool-btn" id="btnZoomIn" aria-label="放大">
+      <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+      <span class="badge">放大</span>
+    </button>
+    <button class="tool-btn" id="btnZoomOut" aria-label="缩小">
+      <svg viewBox="0 0 24 24"><path d="M19 13H5v-2h14v2z"/></svg>
+      <span class="badge">缩小</span>
+    </button>
+    <div class="tool-divider"></div>
+    <button class="tool-btn" id="btnFit" aria-label="适应屏幕">
+      <svg viewBox="0 0 24 24"><path d="M9 15H5v4h4v-2H7v-2H9v-0zm0-6H7v2h2v2h2V9H9zm6 6h-2v2h4v-4h-2v2zm0-6v2h2v2h2V9h-4z"/></svg>
+      <span class="badge">适应屏幕</span>
+    </button>
+    <button class="tool-btn" id="btnReset" aria-label="重置 100%">
+      <svg viewBox="0 0 24 24"><path d="M12 6V3L8 7l4 4V8c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 17.03 20 15.57 20 14c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 9.74C4.46 10.97 4 12.43 4 14c0 4.42 3.58 8 8 8v3l4-4-4-4v3z"/></svg>
+      <span class="badge">重置 100%</span>
+    </button>
+  </div>
+
+  <div class="placeholder" id="placeholder">
+    <div class="spinner"></div>
+    <div>正在加载思维导图…</div>
+  </div>
+</div>
+
+<script>
+/* =========================================================
+ * 章节思维导图查看器
+ *  - 动态懒加载 SVG（fetch）
+ *  - CSS transform 实现缩放/平移（GPU 加速、丝滑）
+ *  - 鼠标滚轮缩放（以光标为中心）、拖动平移
+ *  - 工具栏：放大/缩小/适应/重置
+ *  - 缩略图导航
+ * ========================================================= */
+
+const stage      = document.getElementById('stage');
+const canvas     = document.getElementById('canvas');
+const placeholder= document.getElementById('placeholder');
+const navTabs    = document.getElementById('navTabs');
+const infoChap   = document.getElementById('infoChapter');
+const zoomValEl  = document.getElementById('zoomVal');
+const overview       = document.getElementById('overview');
+const overviewInner  = document.getElementById('overviewInner');
+const overviewVp     = document.getElementById('overviewViewport');
+
+/* ---------- 章节配置 ---------- */
+const TOTAL_CHAPTERS = 18;   // 0 ~ 17，可按需调整
+const chapters = [];
+for (let i = 0; i < TOTAL_CHAPTERS; i++) {
+  const name = i === 0 ? '导论' : `第 ${i} 章`;
+  chapters.push({ id: String(i), name, file: `svg/${i}.svg` });
+}
+
+/* ---------- 状态 ---------- */
+const state = {
+  chapter: null,        // 当前章节对象
+  scale: 1,             // 当前缩放（相对 baseViewBox）
+  minScale: 0.05,
+  maxScale: 8,
+  // 当前 SVG 的原始尺寸（viewBox 解析后）
+  svgW: 0, svgH: 0,
+  loading: false,
+  // 矢量缩放：当前 svg 元素 + 原始 viewBox + 当前 viewBox
+  currentSvg: null,
+  baseViewBox: { x: 0, y: 0, w: 0, h: 0 },
+  viewBox: { x: 0, y: 0, w: 0, h: 0 },
+};
+
+const cache = new Map(); // 章节 -> 解析后的 svg 根元素
+
+/* ---------- 初始化导航 ---------- */
+chapters.forEach((ch, idx) => {
+  const btn = document.createElement('button');
+  btn.className = 'nav-tab' + (idx === 0 ? ' active' : '');
+  btn.dataset.tab = ch.id;
+  btn.textContent = ch.name;
+  btn.addEventListener('click', () => switchChapter(ch.id));
+  navTabs.appendChild(btn);
+});
+
+/* =========================================================
+ * SVG 加载与解析
+ * ========================================================= */
+async function loadSvg(chapter) {
+  if (cache.has(chapter.id)) return cache.get(chapter.id);
+  if (state.loading) return null;
+  state.loading = true;
+  showPlaceholder('正在加载思维导图…', false);
+
+  try {
+    const res = await fetch(chapter.file, { cache: 'force-cache' });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const text = await res.text();
+    const doc  = new DOMParser().parseFromString(text, 'image/svg+xml');
+    if (doc.querySelector('parsererror')) throw new Error('解析失败');
+    const svg = doc.documentElement;
+    // 解析尺寸
+    const vb = (svg.getAttribute('viewBox') || '').split(/\s+/).map(Number);
+    let w, h;
+    if (vb.length === 4 && vb[2] > 0 && vb[3] > 0) {
+      w = vb[2]; h = vb[3];
+    } else {
+      w = parseFloat(svg.getAttribute('width'))  || 1000;
+      h = parseFloat(svg.getAttribute('height')) || 800;
+    }
+    // 关键：保留 viewBox 用于矢量重渲染（解决放大锯齿）
+    // 用 meet 模式（保留 SVG 比例，不拉伸）
+    // 不去掉 width/height 属性（浏览器需要它们计算 svg 元素的初始显示尺寸），
+    // 但用 CSS 100% 100% 覆盖，让 svg 跟随 minder 容器尺寸矢量渲染
+    if (!svg.getAttribute('viewBox')) {
+      svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+    }
+    svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+    // CSS 覆盖 svg 属性的 width/height
+    svg.style.width  = '100%';
+    svg.style.height = '100%';
+
+    cache.set(chapter.id, { svg, w, h });
+    return { svg, w, h };
+  } catch (err) {
+    console.error('加载 SVG 失败：', chapter.file, err);
+    showPlaceholder(`加载失败：${chapter.file}`, true);
+    return null;
+  } finally {
+    state.loading = false;
+  }
+}
+
+function showPlaceholder(text, isError) {
+  placeholder.classList.remove('hidden');
+  placeholder.classList.toggle('error', !!isError);
+  placeholder.querySelector('div:last-child').textContent = text;
+}
+function hidePlaceholder() {
+  placeholder.classList.add('hidden');
+}
+
+/* =========================================================
+ * 切换章节：动态注入 SVG，仅首次 fetch
+ * ========================================================= */
+async function switchChapter(id) {
+  const chapter = chapters.find(c => c.id === id);
+  if (!chapter || state.chapter === chapter) return;
+
+  // 切换 tab 高亮
+  navTabs.querySelectorAll('.nav-tab').forEach(t => {
+    t.classList.toggle('active', t.dataset.tab === id);
+  });
+  infoChap.textContent = chapter.name;
+
+  // 清理当前画布
+  canvas.innerHTML = '';
+
+  // 加载 SVG
+  const data = await loadSvg(chapter);
+  if (!data) return;
+
+  state.chapter = chapter;
+  state.svgW = data.w;
+  state.svgH = data.h;
+  state.currentSvg = data.svg;
+  state.baseViewBox = { x: 0, y: 0, w: data.w, h: data.h };
+
+  // 包裹 minder 容器（minder 占满整个 stage，svg 通过 viewBox 适配）
+  const minder = document.createElement('div');
+  minder.className = 'minder';
+  // 移除 svg 自身可能带有的 transform（由 viewBox 统一控制）
+  data.svg.removeAttribute('transform');
+  data.svg.style.transform = 'none';
+  minder.appendChild(data.svg);
+  canvas.appendChild(minder);
+
+  // 更新缩略图
+  buildOverview(data.svg);
+
+  // 重置变换并适配
+  fitToStage();
+  hidePlaceholder();
+}
+
+/* =========================================================
+ * 变换：缩放 / 平移
+ * 关键：用 svg viewBox 实现矢量缩放，避免 CSS transform 把位图放大产生锯齿
+ *  - state.viewBox = {x, y, w, h} 当前 svg 视口（svg 坐标系）
+ *  - 缩放 = 缩小 viewBox.w/h（视野变小 = 看起来放大）
+ *  - 平移 = 改变 viewBox.x/y
+ *  - minder 始终 = stage 100% × 100%，svg 通过 viewBox 自适应显示
+ *  - svg 内部的 preserveAspectRatio 控制 viewBox 内容如何 fit 到 minder
+ * ========================================================= */
+function applyTransform() {
+  if (!state.currentSvg) return;
+  const v = state.viewBox;
+  state.currentSvg.setAttribute('viewBox', `${v.x} ${v.y} ${v.w} ${v.h}`);
+  // 显示缩放百分比（相对 baseViewBox）
+  const baseW = state.baseViewBox.w;
+  const ratio = baseW / v.w;
+  state.scale = ratio;
+zoomValEl.textContent = Math.round(ratio * 100) + '%';
+  // 显式把 minder 像素尺寸设为 stage 像素尺寸（双重保险，避免 CSS 100% 解析差异）
+  const minder = canvas.querySelector('.minder');
+  if (minder) {
+    minder.style.width  = stage.clientWidth  + 'px';
+    minder.style.height = stage.clientHeight + 'px';
+  }
+  updateOverviewViewport();
+}
+
+/* 获取 minder 当前在 stage 中的实际显示区域
+ * 关键：用 getBoundingClientRect 获取真实像素尺寸，避免 CSS 100% 解析差异
+ * minder 是 stage 的直接子元素（100% × 100%），所以其尺寸 = stage 尺寸 */
+function getMinderRect() {
+  const stageRect = stage.getBoundingClientRect();
+  return { x: 0, y: 0, w: stageRect.width, h: stageRect.height };
+}
+
+/* stage 内坐标 → svg 内容坐标
+ * 关键：svg 元素内 viewBox 内容按 preserveAspectRatio="xMidYMid meet" 缩放留白
+ * 实际渲染时 svg 内容区域 = svg 元素尺寸 meet 进 viewBox 比例后的子集
+ * 我们用 svg 元素的实际渲染尺寸来换算
+ */
+function stageToSvg(cx, cy) {
+  const stageRect = stage.getBoundingClientRect();
+  // cx, cy 是 stage 局部坐标
+  // 转为 svg 元素局部坐标
+  const svgEl = state.currentSvg;
+  if (!svgEl) return { x: 0, y: 0 };
+  const svgRect = svgEl.getBoundingClientRect();
+  // svg 元素 stage 局部坐标
+  const sx = cx - (svgRect.left - stageRect.left);
+  const sy = cy - (svgRect.top  - stageRect.top);
+  // viewBox 在 svg 元素内按 meet 缩放，svg 元素尺寸 = svgRect.width × svgRect.height
+  // 实际内容缩放比 = min(svgRect.width/vb.w, svgRect.height/vb.h)
+  const v = state.viewBox;
+  const scale = Math.min(svgRect.width / v.w, svgRect.height / v.h);
+  const contentW = v.w * scale;
+  const contentH = v.h * scale;
+  const offX = (svgRect.width  - contentW) / 2;
+  const offY = (svgRect.height - contentH) / 2;
+  // svg 局部坐标 → viewBox 坐标
+  return {
+    x: v.x + (sx - offX) / scale,
+    y: v.y + (sy - offY) / scale,
+  };
+}
+
+function fitToStage() {
+  if (!state.svgW || !state.svgH) return;
+  // 让 viewBox 比例 = stage 比例（关键：保证鼠标拖动 1px = 画面 1px）
+  // viewBox 大小 = 能完整包含整个 svg 的最小尺寸
+  const sw = stage.clientWidth;
+  const sh = stage.clientHeight;
+  const stageRatio = sw / sh;
+  const svgRatio = state.svgW / state.svgH;
+  let vbW, vbH;
+  if (stageRatio > svgRatio) {
+    // stage 更宽 → viewBox 高度 = svg 高度，viewBox 宽度 = svg 高度 * stage 比例
+    vbH = state.svgH;
+    vbW = vbH * stageRatio;
+  } else {
+    // stage 更高（或相等）→ viewBox 宽度 = svg 宽度，viewBox 高度 = svg 宽度 / stage 比例
+    vbW = state.svgW;
+    vbH = vbW / stageRatio;
+  }
+  // 居中：viewBox 中心 = svg 中心
+  state.viewBox = {
+    x: (state.svgW - vbW) / 2,
+    y: (state.svgH - vbH) / 2,
+    w: vbW,
+    h: vbH,
+  };
+  applyTransform();
+}
+
+function resetView() {
+  state.viewBox = { ...state.baseViewBox };
+  applyTransform();
+}
+
+function zoomBy(factor, cx, cy) {
+  if (!state.currentSvg) return;
+  const v = state.viewBox;
+  // 当前光标对应的 viewBox 坐标
+  const svgPt = stageToSvg(cx, cy);
+  // 新视口尺寸
+  let newW = v.w / factor;
+  // 限制缩放范围（基于 baseViewBox 的尺寸）
+  const minW = state.baseViewBox.w / state.maxScale;
+  const maxW = state.baseViewBox.w / state.minScale;
+  newW = clamp(newW, minW, maxW);
+  const newH = newW * (v.h / v.w); // 保持 viewBox 比例
+  if (newW === v.w) return;
+  // 新视口位置：让光标下的点位置不变
+  // 屏幕坐标 cx 对应 svg 元素局部坐标，再换算到 viewBox 比例
+  const svgEl = state.currentSvg;
+  const svgRect = svgEl.getBoundingClientRect();
+  const stageRect = stage.getBoundingClientRect();
+  const sx = cx - (svgRect.left - stageRect.left);
+  const sy = cy - (svgRect.top  - stageRect.top);
+  // 缩放前后 svg 元素尺寸不变（除非 window resize），
+  // 所以光标在 svg 元素内的比例位置不变 = (sx / svgRect.width)
+  // 换算成新 viewBox 下的 viewBox 坐标：
+  // 旧 viewBox 中：svgPt = vb.x + (sx - offX) / scale
+  // 新 viewBox 中：保持 svgPt 不变，新 vb.w = newW，新 scale = newScale
+  // 旧 offX 不变，new offX' = (svgRect.w - newW * newScale) / 2
+  // svgPt = newVb.x + (sx - newOffX') / newScale
+  // 推导：newVb.x = svgPt - (sx - newOffX') / newScale
+  //       newOffX' = (svgRect.w - newW * newScale) / 2
+  const oldScale = Math.min(svgRect.width / v.w, svgRect.height / v.h);
+  const newScale = Math.min(svgRect.width / newW, svgRect.height / newH);
+  const oldOffX = (svgRect.width  - v.w * oldScale) / 2;
+  const oldOffY = (svgRect.height - v.h * oldScale) / 2;
+  const newOffX = (svgRect.width  - newW * newScale) / 2;
+  const newOffY = (svgRect.height - newH * newScale) / 2;
+  // 验证：旧 svgPt.x = v.x + (sx - oldOffX) / oldScale ✓
+  // 新 svgPt.x = newX + (sx - newOffX) / newScale
+  // => newX = svgPt.x - (sx - newOffX) / newScale
+  const newX = svgPt.x - (sx - newOffX) / newScale;
+  const newY = svgPt.y - (sy - newOffY) / newScale;
+  state.viewBox = { x: newX, y: newY, w: newW, h: newH };
+  applyTransform();
+}
+
+function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
+
+/* =========================================================
+ * 鼠标交互：拖动 + 滚轮缩放
+ * 拖动：dx 屏幕像素 → viewBox.x 偏移 dx * (vb.w / sw)
+ * ========================================================= */
+let drag = null;
+
+stage.addEventListener('mousedown', e => {
+  if (e.button !== 0) return;
+  drag = {
+    sx: e.clientX, sy: e.clientY,
+    vx: state.viewBox.x, vy: state.viewBox.y,
+    moved: false
+  };
+  stage.classList.add('dragging');
+});
+
+window.addEventListener('mousemove', e => {
+  if (!drag) return;
+  const dx = e.clientX - drag.sx;
+  const dy = e.clientY - drag.sy;
+  if (Math.abs(dx) + Math.abs(dy) > 2) drag.moved = true;
+  // 屏幕像素 → viewBox 偏移（基于 svg 内容实际渲染缩放比）
+  const svgEl = state.currentSvg;
+  if (!svgEl) return;
+  const svgRect = svgEl.getBoundingClientRect();
+  const v = state.viewBox;
+  const scale = Math.min(svgRect.width / v.w, svgRect.height / v.h);
+  state.viewBox.x = drag.vx - dx / scale;
+  state.viewBox.y = drag.vy - dy / scale;
+  applyTransform();
+});
+
+window.addEventListener('mouseup', () => {
+  if (drag) {
+    stage.classList.remove('dragging');
+    drag = null;
+  }
+});
+
+stage.addEventListener('wheel', e => {
+  e.preventDefault();
+  const rect = stage.getBoundingClientRect();
+  const cx = e.clientX - rect.left;
+  const cy = e.clientY - rect.top;
+  // 平滑缩放：deltaY 正值 = 缩小，负值 = 放大
+  // 使用指数曲线使缩放感觉更自然
+  const factor = Math.exp(-e.deltaY * 0.0015);
+  zoomBy(factor, cx, cy);
+}, { passive: false });
+
+/* 触屏支持 */
+let touch = null;
+stage.addEventListener('touchstart', e => {
+  if (e.touches.length === 1) {
+    const t = e.touches[0];
+    touch = {
+      mode: 'pan',
+      sx: t.clientX, sy: t.clientY,
+      vx: state.viewBox.x, vy: state.viewBox.y
+    };
+  } else if (e.touches.length === 2) {
+    const [a, b] = e.touches;
+    const d = Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
+    touch = { mode: 'pinch', dist: d };
+  }
+}, { passive: true });
+
+stage.addEventListener('touchmove', e => {
+  if (!touch) return;
+  if (touch.mode === 'pan' && e.touches.length === 1) {
+    e.preventDefault();
+    const t = e.touches[0];
+    const svgEl = state.currentSvg;
+    if (!svgEl) return;
+    const svgRect = svgEl.getBoundingClientRect();
+    const v = state.viewBox;
+    const scale = Math.min(svgRect.width / v.w, svgRect.height / v.h);
+    const dx = t.clientX - touch.sx;
+    const dy = t.clientY - touch.sy;
+    state.viewBox.x = touch.vx - dx / scale;
+    state.viewBox.y = touch.vy - dy / scale;
+    applyTransform();
+  } else if (touch.mode === 'pinch' && e.touches.length === 2) {
+    e.preventDefault();
+    const [a, b] = e.touches;
+    const d = Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
+    const factor = d / touch.dist;
+    touch.dist = d;
+    const rect = stage.getBoundingClientRect();
+    const cx = (a.clientX + b.clientX) / 2 - rect.left;
+    const cy = (a.clientY + b.clientY) / 2 - rect.top;
+    zoomBy(factor, cx, cy);
+  }
+}, { passive: false });
+
+stage.addEventListener('touchend', () => { touch = null; });
+
+/* 键盘快捷键 */
+window.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  const sw = stage.clientWidth, sh = stage.clientHeight;
+  if (e.key === '+' || e.key === '=') { zoomBy(1.2, sw / 2, sh / 2); e.preventDefault(); }
+  else if (e.key === '-' || e.key === '_') { zoomBy(1 / 1.2, sw / 2, sh / 2); e.preventDefault(); }
+  else if (e.key === '0') { resetView(); e.preventDefault(); }
+  else if (e.key === 'f' || e.key === 'F') { fitToStage(); e.preventDefault(); }
+  else if (e.key === 'ArrowRight') {
+    const idx = chapters.findIndex(c => c.id === state.chapter?.id);
+    if (idx >= 0 && idx < chapters.length - 1) switchChapter(chapters[idx + 1].id);
+  } else if (e.key === 'ArrowLeft') {
+    const idx = chapters.findIndex(c => c.id === state.chapter?.id);
+    if (idx > 0) switchChapter(chapters[idx - 1].id);
+  }
+});
+
+/* =========================================================
+ * 工具栏
+ * ========================================================= */
+document.getElementById('btnZoomIn').addEventListener('click', () => {
+  zoomBy(1.25, stage.clientWidth / 2, stage.clientHeight / 2);
+});
+document.getElementById('btnZoomOut').addEventListener('click', () => {
+  zoomBy(1 / 1.25, stage.clientWidth / 2, stage.clientHeight / 2);
+});
+document.getElementById('btnFit').addEventListener('click', fitToStage);
+document.getElementById('btnReset').addEventListener('click', resetView);
+
+/* 窗口大小变化时调整 viewBox，保持画面 1:1 跟手 */
+let resizeTimer;
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => {
+    if (!state.chapter || !state.currentSvg) return;
+    // 重新计算 viewBox：保持 viewBox 中心在 svg 中的位置不变，
+    // 调整 viewBox 比例 = 新的 stage 比例
+    const v = state.viewBox;
+    const oldRatio = v.w / v.h;
+    const sw = stage.clientWidth;
+    const sh = stage.clientHeight;
+    const newRatio = sw / sh;
+    // viewBox 中心（svg 坐标系）
+    const cx = v.x + v.w / 2;
+    const cy = v.y + v.h / 2;
+    // 保持 viewBox 短边不变（保持视觉缩放感）
+    if (newRatio > oldRatio) {
+      // 新的更宽 → viewBox.w 变长
+      const newW = v.h * newRatio;
+      v.x = cx - newW / 2;
+      v.w = newW;
+    } else {
+      // 新的更高 → viewBox.h 变长
+      const newH = v.w / newRatio;
+      v.y = cy - newH / 2;
+      v.h = newH;
+    }
+    buildOverview(cache.get(state.chapter.id).svg);
+    applyTransform();
+  }, 100);
+});
+
+/* =========================================================
+ * 缩略图导航
+ * ========================================================= */
+function buildOverview(svg) {
+  // 复制一份 svg 用于缩略图
+  overviewInner.innerHTML = '';
+  const clone = svg.cloneNode(true);
+  clone.removeAttribute('width');
+  clone.removeAttribute('height');
+  clone.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+  // 按缩略图容器尺寸等比缩放
+  const cw = overview.clientWidth - 8;
+  const ch = overview.clientHeight - 8;
+  const s = Math.min(cw / state.svgW, ch / state.svgH);
+  const w = state.svgW * s;
+  const h = state.svgH * s;
+  clone.style.width  = w + 'px';
+  clone.style.height = h + 'px';
+  overviewInner.appendChild(clone);
+  overviewInner.style.width  = w + 'px';
+  overviewInner.style.height = h + 'px';
+  // 让缩略图居中
+  overviewInner.style.left = (overview.clientWidth  - w) / 2 + 'px';
+  overviewInner.style.top  = (overview.clientHeight - h) / 2 + 'px';
+  updateOverviewViewport();
+}
+
+function updateOverviewViewport() {
+  if (!state.svgW) return;
+  const cw = overview.clientWidth;
+  const ch = overview.clientHeight;
+  // 缩略图中 svg 的可视区域比例
+  const s = Math.min((cw - 8) / state.svgW, (ch - 8) / state.svgH);
+  const sw = state.svgW * s;
+  const sh = state.svgH * s;
+  const offX = (cw - sw) / 2;
+  const offY = (ch - sh) / 2;
+
+  // 当前 viewBox 直接就是 svg 坐标系下的可视矩形
+  const v = state.viewBox;
+  // 映射到缩略图
+  const rx = offX + v.x * s;
+  const ry = offY + v.y * s;
+  const rw = Math.min(v.w * s, sw);
+  const rh = Math.min(v.h * s, sh);
+
+  overviewVp.style.left   = rx + 'px';
+  overviewVp.style.top    = ry + 'px';
+  overviewVp.style.width  = rw + 'px';
+  overviewVp.style.height = rh + 'px';
+}
+
+/* 点击缩略图快速跳转 */
+overview.addEventListener('click', e => {
+  if (!state.svgW) return;
+  const rect = overview.getBoundingClientRect();
+  const px = e.clientX - rect.left;
+  const py = e.clientY - rect.top;
+  const cw = rect.width, ch = rect.height;
+  const s = Math.min((cw - 8) / state.svgW, (ch - 8) / state.svgH);
+  const offX = (cw - state.svgW * s) / 2;
+  const offY = (ch - state.svgH * s) / 2;
+  // 点击位置对应的 svg 坐标
+  const sx = (px - offX) / s;
+  const sy = (py - offY) / s;
+  // 居中显示：让 (sx, sy) 居中到 stage
+  const v = state.viewBox;
+  state.viewBox = {
+    x: sx - v.w / 2,
+    y: sy - v.h / 2,
+    w: v.w,
+    h: v.h,
+  };
+  applyTransform();
+});
+
+/* =========================================================
+ * 启动
+ * ========================================================= */
+window.addEventListener('DOMContentLoaded', () => {
+  switchChapter('0');
+});
+</script>
+
+</body>
+</html>

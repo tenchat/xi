@@ -1,0 +1,401 @@
+% ========================================================
+%  习近平新时代中国特色社会主义思想概论  全真模拟仿真试卷（含参考答案）
+%  覆盖范围：导论—第十七章核心考点，依据 note6.md 及各章笔记编制
+% ========================================================
+\documentclass[12pt, a4paper]{article}
+
+% ---- 中文支持 ----
+\usepackage[UTF8]{ctex}
+
+% ---- 数学 ----
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{mathtools}
+
+% ---- 页面布局 ----
+\usepackage[top=2.5cm, bottom=2.5cm, left=2.8cm, right=2.8cm, headheight=14pt]{geometry}
+
+% ---- 表格 ----
+\usepackage{booktabs, array, multirow, makecell}
+\usepackage{tabularx}
+
+% ---- 页眉页脚 ----
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.6pt}
+\lhead{\small 习近平新时代中国特色社会主义思想概论·全真模拟仿真试卷}
+\rhead{\small 共 \pageref{LastPage} 页}
+\cfoot{\small 第 \thepage\ 页}
+
+% ---- 计数器与样式 ----
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable}
+
+% ---- 填空线 ----
+\newcommand{\blank}[1]{\underline{\hspace{#1}}}
+
+% ---- 答案盒子 ----
+\newtcolorbox{answerbox}[1][]{
+  breakable,
+  colback=gray!6,
+  colframe=gray!50,
+  fonttitle=\bfseries\small,
+  title=参考答案,
+  #1
+}
+
+% ---- 题号格式 ----
+\newcounter{bigq}
+
+\newcommand{\BigQ}[1]{%
+  \stepcounter{bigq}%
+  \vspace{6pt}%
+  \noindent{\large\bfseries 第\chinese{bigq}大题\quad #1}%
+  \vspace{4pt}\par
+}
+
+\newcounter{subq}[bigq]
+
+\newcommand{\SubQ}{%
+  \stepcounter{subq}%
+  \noindent\textbf{（\arabic{subq}）}\quad
+}
+
+\newcounter{smallq}[subq]
+
+\newcommand{\SmallQ}{%
+  \stepcounter{smallq}%
+  \noindent\arabic{smallq}.\quad
+}
+
+\newcommand{\resetsmallq}{\setcounter{smallq}{0}}
+
+% 分隔线
+\newcommand{\examrule}{\noindent\rule{\linewidth}{0.6pt}}
+
+% 选项排版
+\newcommand{\choices}[4]{\par
+\noindent\hspace*{2em}A. #1\quad B. #2\quad C. #3\quad D. #4\par}
+
+\newcommand{\choicelong}[4]{\par
+\noindent\hspace*{2em}A. #1\par\hspace*{2em}B. #2\par\hspace*{2em}C. #3\par\hspace*{2em}D. #4\par}
+
+\newcommand{\choicelongfive}[5]{\par
+\noindent\hspace*{2em}A. #1\par\hspace*{2em}B. #2\par\hspace*{2em}C. #3\par\hspace*{2em}D. #4\par\hspace*{2em}E. #5\par}
+
+\newcommand{\choicelongsix}[6]{\par
+\noindent\hspace*{2em}A. #1\par\hspace*{2em}B. #2\par\hspace*{2em}C. #3\par\hspace*{2em}D. #4\par\hspace*{2em}E. #5\par\hspace*{2em}F. #6\par}
+
+% ---- 文档开始 ----
+\begin{document}
+
+% ============================================================
+%  封面
+% ============================================================
+\begin{center}
+  {\LARGE\bfseries 习近平新时代中国特色社会主义思想概论}\\[8pt]
+  {\large\bfseries 全真模拟仿真试卷·Kimi·A卷}\\[16pt]
+  \begin{tabular}{@{}p{\linewidth}@{}}
+    考试时间：120 分钟 \hfill 满分：100 分 \\[4pt]
+    注意事项：请将答案写在答题纸指定区域，写在本卷上无效。\\[4pt]
+    试卷结构：一、单项选择题 30 题（30 分）；二、多项选择题 10 题（20 分）；三、简答题 5 题（50 分）。 \\
+  \end{tabular}
+  \vspace{4pt}
+
+  \examrule
+
+  \vspace{6pt}
+  \begin{tabular}{|c|c|c|c|c|}
+    \hline
+    \textbf{题号} & 一 & 二 & 三 & \textbf{总分} \\
+    \hline
+    \textbf{满分} & 30 & 20 & 50 & 100 \\
+    \hline
+    \textbf{得分} & & & & \\
+    \hline
+  \end{tabular}
+\end{center}
+
+\vspace{10pt}
+\examrule
+\vspace{6pt}
+
+% ============================================================
+%  第一大题：单项选择题
+% ============================================================
+\BigQ{单项选择题（每题 1 分，共 30 分）}
+
+\noindent\textit{说明：每小题给出的四个选项中，只有一个选项是符合题目要求的。}
+\vspace{6pt}
+\resetsmallq
+\SmallQ 习近平新时代中国特色社会主义思想创立的时代背景不包括（\hspace{2em}）。
+\choices{世界百年未有之大变局加速演进}{中华民族伟大复兴进入关键时期}{中国式现代化全面推进拓展}{全面建成小康社会已经全面完成}
+\vspace{4pt}
+\SmallQ "两个结合"中的"根脉"是指（\hspace{2em}）。
+\choices{马克思主义基本原理}{中华优秀传统文化}{中国特色社会主义理论体系}{社会主义核心价值观}
+\vspace{4pt}
+\SmallQ 在习近平新时代中国特色社会主义思想科学体系中，发挥统摄作用的是（\hspace{2em}）。
+\choices{"十四个坚持"}{"十三个方面成就"}{"十个明确"}{"六个必须坚持"}
+\vspace{4pt}
+\SmallQ "六个必须坚持"中，体现了变与不变、继承与发展内在联系的是（\hspace{2em}）。
+\choices{必须坚持问题导向}{必须坚持守正创新}{必须坚持系统观念}{必须坚持胸怀天下}
+\vspace{4pt}
+\SmallQ 中国特色社会主义进入新时代，是我国发展新的（\hspace{2em}）。
+\choices{历史阶段}{历史时期}{历史方位}{历史起点}
+\vspace{4pt}
+\SmallQ 新时代我国社会主要矛盾已经转化为（\hspace{2em}）。
+\choicelong{人民日益增长的物质文化需要同落后的社会生产之间的矛盾}{人民日益增长的美好生活需要和不平衡不充分的发展之间的矛盾}{人民日益增长的美好生活需要同落后的社会生产之间的矛盾}{人民日益增长的物质文化需要同不平衡不充分的发展之间的矛盾}
+\vspace{4pt}
+\SmallQ "一个变、两个没有变"中，"两个没有变"是指我国仍处于社会主义初级阶段的基本国情没有变，以及（\hspace{2em}）。
+\choices{我国社会主要矛盾没有变}{我国是世界最大发展中国家的国际地位没有变}{我国经济发展方式没有变}{我国改革开放的基本国策没有变}
+\vspace{4pt}
+\SmallQ 道路问题是关系党的事业兴衰成败的（\hspace{2em}）。
+\choices{第一位的问题}{重要问题}{根本问题}{核心问题}
+\vspace{4pt}
+\SmallQ 中国梦的本质是（\hspace{2em}）。
+\choices{国家富强、民族振兴、人民幸福}{经济发展、政治民主、文化繁荣}{社会和谐、生态良好、人民安康}{全面建设社会主义现代化国家}
+\vspace{4pt}
+\SmallQ 中国式现代化区别于西方现代化的显著标志是（\hspace{2em}）。
+\choices{人口规模巨大的现代化}{全体人民共同富裕的现代化}{物质文明和精神文明相协调的现代化}{人与自然和谐共生的现代化}
+\vspace{4pt}
+\SmallQ 推进中国式现代化必须牢牢把握的重大原则共有（\hspace{2em}）。
+\choices{三个}{四个}{五个}{六个}
+\vspace{4pt}
+\SmallQ 中国最大的国情是（\hspace{2em}）。
+\choices{人口众多}{中国共产党的领导}{社会主义初级阶段}{发展中大国}
+\vspace{4pt}
+\SmallQ 党的领导的最高原则是（\hspace{2em}）。
+\choices{党的民主集中制}{党中央集中统一领导}{全心全意为人民服务}{全面从严治党}
+\vspace{4pt}
+\SmallQ 马克思主义政党第一位的能力是（\hspace{2em}）。
+\choices{思想引领力}{政治领导力}{群众组织力}{社会号召力}
+\vspace{4pt}
+\SmallQ 人民立场是中国共产党的（\hspace{2em}）。
+\choices{基本政治立场}{根本政治立场}{重要政治立场}{唯一政治立场}
+\vspace{4pt}
+\SmallQ 共同富裕是中国特色社会主义的（\hspace{2em}）。
+\choices{根本任务}{本质要求}{基本方略}{最终目标}
+\vspace{4pt}
+\SmallQ 新时代全面深化改革开放就其艰巨性、复杂性和系统性来说，是一场（\hspace{2em}）。
+\choices{一般性改革}{深刻革命}{局部调整}{政策完善}
+\vspace{4pt}
+\SmallQ 全面深化改革的总目标是（\hspace{2em}）。
+\choicelong{建设社会主义现代化强国}{完善和发展中国特色社会主义制度、推进国家治理体系和治理能力现代化}{实现中华民族伟大复兴}{全面建成小康社会}
+\vspace{4pt}
+\SmallQ 统筹推进各领域各方面改革开放，必须以（\hspace{2em}）为主线。
+\choices{经济建设}{制度建设}{社会建设}{生态文明建设}
+\vspace{4pt}
+\SmallQ 新发展理念中，注重解决发展内外联动问题的是（\hspace{2em}）。
+\choices{创新}{协调}{绿色}{开放}
+\vspace{4pt}
+\SmallQ 构建新发展格局最本质的特征是（\hspace{2em}）。
+\choices{扩大内需}{实现高水平的自立自强}{深化供给侧结构性改革}{发展实体经济}
+\vspace{4pt}
+\SmallQ 在"科技是第一生产力、人才是第一资源、创新是第一动力"中，"第一资源"是指（\hspace{2em}）。
+\choices{科技}{人才}{创新}{教育}
+\vspace{4pt}
+\SmallQ 人民民主是社会主义的（\hspace{2em}）。
+\choices{本质特征}{生命}{根本保证}{基本方略}
+\vspace{4pt}
+\SmallQ 全过程人民民主是社会主义民主政治的（\hspace{2em}）。
+\choices{基本形式}{本质属性}{重要补充}{制度载体}
+\vspace{4pt}
+\SmallQ 人民代表大会制度是我国的（\hspace{2em}）。
+\choices{基本政治制度}{根本政治制度}{重要政治制度}{国家结构形式}
+\vspace{4pt}
+\SmallQ 文化自信是"四个自信"中（\hspace{2em}）。
+\choices{更基本、更深沉、更持久的力量}{最现实的自信}{最狭隘的自信}{最不重要的自信}
+\vspace{4pt}
+\SmallQ 意识形态关乎旗帜、关乎道路、关乎（\hspace{2em}）。
+\choices{经济发展}{国家政治安全}{社会稳定}{文化繁荣}
+\vspace{4pt}
+\SmallQ 分配制度是促进共同富裕的（\hspace{2em}）。
+\choices{根本保障}{基础性制度}{重要举措}{唯一途径}
+\vspace{4pt}
+\SmallQ 生态文明建设应摆在全局工作的（\hspace{2em}）。
+\choices{一般位置}{突出位置}{次要位置}{特殊位置}
+\vspace{4pt}
+\SmallQ "两个确立"是指确立习近平同志党中央的核心、全党的核心地位，确立（\hspace{2em}）。
+\choices{中国特色社会主义制度的指导地位}{习近平新时代中国特色社会主义思想的指导地位}{社会主义核心价值观的指导地位}{党的基本路线的指导地位}
+\vspace{10pt}
+\examrule
+
+% ============================================================
+%  第二大题：多项选择题
+% ============================================================
+\BigQ{多项选择题（每题 2 分，共 20 分）}
+
+\noindent\textit{说明：每小题给出的选项中，有两个或两个以上选项符合题目要求；少选、多选、错选均不得分。}
+\vspace{6pt}
+\resetsmallq
+\SmallQ 习近平新时代中国特色社会主义思想科学回答的重大时代课题包括（\hspace{2em}）。
+\choicelong{新时代坚持和发展什么样的中国特色社会主义、怎样坚持和发展中国特色社会主义}{建设什么样的社会主义现代化强国、怎样建设社会主义现代化强国}{建设什么样的长期执政的马克思主义政党、怎样建设长期执政的马克思主义政党}{实现什么样的发展、怎样实现发展}
+\vspace{4pt}
+\SmallQ "四个自信"包括（\hspace{2em}）。
+\choices{道路自信}{理论自信}{制度自信}{文化自信}
+\vspace{4pt}
+\SmallQ 中国式现代化的中国特色包括（\hspace{2em}）。
+\choicelongfive{人口规模巨大的现代化}{全体人民共同富裕的现代化}{物质文明和精神文明相协调的现代化}{人与自然和谐共生的现代化}{走和平发展道路的现代化}
+\vspace{4pt}
+\SmallQ 推进中国式现代化必须牢牢把握的重大原则包括（\hspace{2em}）。
+\choicelongfive{坚持和加强党的全面领导}{坚持中国特色社会主义道路}{坚持以人民为中心的发展思想}{坚持深化改革开放}{坚持发扬斗争精神}
+\vspace{4pt}
+\SmallQ 党的领导制度体系主要涵盖以下哪些方面？（\hspace{2em}）
+\choicelongsix{建立不忘初心、牢记使命的制度}{完善坚定维护党中央权威和集中统一领导的各项制度}{健全党的全面领导制度}{健全为人民执政、靠人民执政各项制度}{健全提高党的执政能力和领导水平制度}{完善全面从严治党制度}
+\vspace{4pt}
+\SmallQ 新发展理念的科学内涵包括（\hspace{2em}）。
+\choicelongfive{创新}{协调}{绿色}{开放}{共享}
+\vspace{4pt}
+\SmallQ 全过程人民民主体现了"四个相统一"，包括（\hspace{2em}）。
+\choicelongfive{过程民主和成果民主相统一}{程序民主和实质民主相统一}{直接民主和间接民主相统一}{人民民主和国家意志相统一}{选举民主和协商民主相统一}
+\vspace{4pt}
+\SmallQ 中国特色社会主义政治制度包括（\hspace{2em}）。
+\choicelong{人民代表大会制度}{中国共产党领导的多党合作和政治协商制度}{民族区域自治制度}{基层群众自治制度}
+\vspace{4pt}
+\SmallQ 坚定中国特色社会主义文化自信的底气在于（\hspace{2em}）。
+\choicelong{中华优秀传统文化}{革命文化和社会主义先进文化}{中国特色社会主义伟大实践}{西方先进文化}
+\vspace{4pt}
+\SmallQ 全面依法治国必须统筹处理的重大关系包括（\hspace{2em}）。
+\choicelongfive{政治和法治}{改革和法治}{依法治国和以德治国}{依法治国和依规治党}{民主和法治}
+\vspace{10pt}
+\examrule
+
+% ============================================================
+%  第三大题：简答题
+% ============================================================
+\BigQ{简答题（每题 10 分，共 50 分）}
+
+\noindent\textit{说明：请结合教材与课堂重点，在给出结论的基础上作简要论述；只写结论不能得满分。}
+\vspace{6pt}
+\resetsmallq
+\SmallQ（10 分）试述习近平新时代中国特色社会主义思想创立的时代背景（五个方面）。
+\vspace{6pt}
+\SmallQ（10 分）如何理解"两个确立"的决定性意义？
+\vspace{6pt}
+\SmallQ（10 分）为什么说中国共产党的领导是中国特色社会主义制度的最大优势？
+\vspace{6pt}
+\SmallQ（10 分）简述新发展理念的科学内涵及各自着重解决的发展问题。
+\vspace{6pt}
+\SmallQ（10 分）如何理解中国式现代化创造了人类文明新形态？
+\vspace{10pt}
+\examrule
+\vspace{16pt}
+\examrule
+\vspace{4pt}
+\begin{center}
+  {\large\bfseries ——试题到此结束，请认真检查——}
+\end{center}
+\vspace{4pt}
+\examrule
+
+% ============================================================
+%  参考答案
+% ============================================================
+
+\newpage
+\setcounter{bigq}{0}
+\setcounter{subq}{0}
+\setcounter{smallq}{0}
+\begin{center}
+  {\LARGE\bfseries 参考答案与评分标准}
+\end{center}
+\vspace{8pt}
+\examrule
+\vspace{6pt}
+
+\noindent\textbf{一、单项选择题（每题 1 分，共 30 分）}
+\vspace{4pt}
+\begin{center}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+题号 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 \\
+\hline
+答案 & D & B & C & B & C & B & B & A & A & B \\
+\hline
+题号 & 11 & 12 & 13 & 14 & 15 & 16 & 17 & 18 & 19 & 20 \\
+\hline
+答案 & C & B & B & B & B & B & B & B & B & D \\
+\hline
+题号 & 21 & 22 & 23 & 24 & 25 & 26 & 27 & 28 & 29 & 30 \\
+\hline
+答案 & B & B & B & B & B & A & B & B & B & B \\
+\hline
+\end{tabular}
+\end{center}
+\vspace{6pt}
+
+\noindent\textbf{二、多项选择题（每题 2 分，共 20 分）}
+\vspace{4pt}
+\begin{center}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+题号 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 \\
+\hline
+答案 & ABC & ABCD & ABCDE & ABCDE & ABCDEF & ABCDE & ABCD & ABCD & ABC & ABCD \\
+\hline
+\end{tabular}
+\end{center}
+\vspace{10pt}
+\BigQ{简答题参考答案}
+\vspace{4pt}
+
+\noindent\textbf{1.（10 分）试述习近平新时代中国特色社会主义思想创立的时代背景（五个方面）。}
+\begin{answerbox}
+\textbf{（1）世界百年未有之大变局加速演进。}国际力量对比深刻调整，全球治理体系加速变革，我国发展面临新的外部环境。
+\textbf{（2）中华民族伟大复兴进入关键时期。}我国正处于实现"两个一百年"奋斗目标的历史交汇期，比历史上任何时期都更接近、更有信心和能力实现中华民族伟大复兴的目标。
+\textbf{（3）中国式现代化全面推进拓展。}在理论和实践上不断创新突破，成功推进和拓展了中国式现代化，为强国建设、民族复兴提供了正确道路。
+\textbf{（4）科学社会主义在 21 世纪的中国焕发新的蓬勃生机。}中国特色社会主义的伟大成就，使科学社会主义在当代中国展现出强大生命力。
+\textbf{（5）中国共产党自我革命开辟新的境界。}党在革命性锻造中更加坚强有力，形成了以伟大自我革命引领伟大社会革命的新境界。
+\end{answerbox}
+\vspace{6pt}
+
+\noindent\textbf{2.（10 分）如何理解"两个确立"的决定性意义？}
+\begin{answerbox}
+\textbf{（1）"两个确立"的内涵。}党的十九届六中全会指出，党确立习近平同志党中央的核心、全党的核心地位，确立习近平新时代中国特色社会主义思想的指导地位。
+\textbf{（2）重大政治成果。}"两个确立"是党在新时代取得的重大政治成果，反映了全党全军全国各族人民共同心愿。
+\textbf{（3）决定性因素。}新时代的伟大实践充分证明，"两个确立"是新时代党和国家事业取得历史性成就、发生历史性变革的决定性因素。
+\textbf{（4）最大确定性、最大底气、最大保证。}面对前进道路上的各种风险挑战，"两个确立"是党和人民应对一切不确定性的最大确定性、最大底气、最大保证。
+\textbf{（5）实践要求。}新时代新征程上，必须深刻领悟"两个确立"的决定性意义，增强"四个意识"、坚定"四个自信"、做到"两个维护"，确保全党团结统一和行动一致。
+\end{answerbox}
+\vspace{6pt}
+
+\noindent\textbf{3.（10 分）为什么说中国共产党的领导是中国特色社会主义制度的最大优势？}
+\begin{answerbox}
+\textbf{（1）中国最大的国情就是中国共产党的领导。}中国共产党的领导地位是在历史奋斗中形成的，是人民当家作主的可靠保障，关系中国特色社会主义的性质、方向和命运，是实现中华民族伟大复兴的根本保证。
+\textbf{（2）党的自身优势是制度优势的主要来源。}中国共产党具有强大的政治领导力、思想引领力、群众组织力、社会号召力，其中政治领导力是马克思主义政党第一位的能力。
+\textbf{（3）党以马克思主义作为行动指南。}在实践中不断推进马克思主义中国化时代化，为坚持和完善中国特色社会主义制度提供强大理论优势。
+\textbf{（4）党能够集中力量办大事。}党能够集中全党全国力量、凝聚全民族共同意志，在各项事业中发挥总揽全局、协调各方的作用，确保中国特色社会主义制度的显著优势充分彰显。
+\end{answerbox}
+\vspace{6pt}
+
+\noindent\textbf{4.（10 分）简述新发展理念的科学内涵及各自着重解决的发展问题。}
+\begin{answerbox}
+新发展理念是指挥棒、红绿灯，是引领我国发展全局深刻变革的科学指引。
+\textbf{（1）创新是引领发展的第一动力，}注重解决发展动力问题。
+\textbf{（2）协调是持续健康发展的内在要求，}注重解决发展不平衡问题。
+\textbf{（3）绿色是永续发展的必要条件和人民对美好生活追求的重要体现，}注重解决人与自然和谐共生问题。
+\textbf{（4）开放是国家繁荣发展的必由之路，}注重解决发展内外联动问题。
+\textbf{（5）共享是中国特色社会主义的本质要求，}注重解决社会公平正义问题，必须坚持全民共享、全面共享、共建共享、渐进共享，不断推进全体人民共同富裕。
+\end{answerbox}
+\vspace{6pt}
+
+\noindent\textbf{5.（10 分）如何理解中国式现代化创造了人类文明新形态？}
+\begin{answerbox}
+\textbf{（1）提供了一种全新的现代化模式。}中国式现代化打破了"现代化=西方化"的迷思，展现了不同于西方现代化模式的新图景。
+\textbf{（2）是对西方式现代化理论和实践的重大超越。}中国式现代化摒弃了西方现代化对外扩张掠夺、两极分化、物质主义膨胀等老路，走出了一条人口规模巨大、全体人民共同富裕、物质文明和精神文明相协调、人与自然和谐共生、走和平发展道路的现代化道路。
+\textbf{（3）为广大发展中国家提供了全新选择。}中国式现代化拓展了发展中国家走向现代化的途径，为世界上那些既希望加快发展又希望保持自身独立性的国家和民族提供了全新选择。
+\textbf{（4）要牢牢把握推进中国式现代化的重大原则。}推进中国式现代化必须牢牢把握坚持和加强党的全面领导、坚持中国特色社会主义道路、坚持以人民为中心的发展思想、坚持深化改革开放、坚持发扬斗争精神等重大原则。
+\end{answerbox}
+\vspace{12pt}
+\examrule
+\begin{center}
+  \textit{参考答案仅供参考，评分时应酌情给分，步骤正确、论述充分可得过程分。}
+\end{center}
+\end{document}

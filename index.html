@@ -800,7 +800,6 @@
     }
     .md table {
       width: 100%;
-      min-width: max-content;
       border-collapse: collapse;
       background: var(--paper);
     }
@@ -817,7 +816,8 @@
       padding: 9px 12px;
       border-bottom: 1px solid var(--border);
       font-size: 14px;
-      white-space: nowrap;
+      word-break: break-word;
+      overflow-wrap: break-word;
     }
     .md tr:nth-child(even) td { background: var(--bg); }
 
@@ -1086,9 +1086,10 @@
       { id: 'note4',     group: '复习笔记', title: '复习笔记 四', file: 'unit/note4.md',     icon: '4' },
       { id: 'note5',     group: '复习笔记', title: '复习笔记 五', file: 'unit/note5.md',     icon: '5' },
       { id: 'note6',     group: '复习笔记', title: '复习笔记 六', file: 'unit/note6.md',     icon: '6' },
-      { id: 'mindmap',   group: '思维导图', title: '思维导图', file: 'unit/mind.html',     icon: '7', standalone: true },
-      { id: 'note7',     group: '复习笔记', title: '毛概复习笔记 一', file: 'unit/mao1.md',     icon: '8' },
-      { id: 'note8',     group: '复习笔记', title: '毛概复习笔记 二', file: 'unit/mao2.md',     icon: '9' },
+      { id: 'note7',     group: '复习笔记', title: '毛概复习笔记 一', file: 'unit/mao1.md',     icon: '7' },
+      { id: 'note8',     group: '复习笔记', title: '毛概复习笔记 二', file: 'unit/mao2.md',     icon: '8' },      
+      { id: 'mindmap',   group: '其他资料', title: '考试试题', file: 'exam.html',     icon: '9', standalone: true },
+      { id: 'mindmap',   group: '其他资料', title: '思维导图', file: 'unit/mind.html',     icon: '10', standalone: true },
       { id: 'question1', group: '练习题',   title: '练习题 一',   file: 'unit/question1.md', icon: 'Q' },
       { id: 'question2', group: '练习题',   title: '练习题 二',   file: 'unit/question2.md', icon: 'Q' },
     ];

@@ -1,0 +1,588 @@
+% ========================================================
+%  《习近平新时代中国特色社会主义思想概论》 全真模拟仿真试卷（含参考答案）
+%  覆盖范围：时代背景、两个确立、新时代内涵、中国式现代化、党的领导、人民立场、共同富裕、改革开放、新发展理念、全过程人民民主、文化自信、生态文明建设等
+% ========================================================
+\documentclass[12pt, a4paper]{article}
+
+% ---- 中文支持 ----
+\usepackage[UTF8]{ctex}
+
+% ---- 数学 ----
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{mathtools}
+
+% ---- 页面布局 ----
+\usepackage[top=2.5cm, bottom=2.5cm, left=2.8cm, right=2.8cm]{geometry}
+
+% ---- 表格 ----
+\usepackage{booktabs, array, multirow, makecell}
+\usepackage{tabularx}
+
+% ---- 页眉页脚 ----
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.6pt}
+\lhead{\small 《习近平新时代中国特色社会主义思想概论》·千问卷}
+\rhead{\small 共 \pageref{LastPage} 页}
+\cfoot{\small 第 \thepage\ 页}
+
+% ---- 计数器与样式 ----
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable}
+
+% ---- 填空线 ----
+\newcommand{\blank}[1]{\underline{\hspace{#1}}}
+
+% ---- 答案盒子 ----
+\newtcolorbox{answerbox}[1][]{
+  breakable,
+  colback=gray!6,
+  colframe=gray!50,
+  fonttitle=\bfseries\small,
+  title=参考答案,
+  #1
+}
+
+% ---- 题号格式 ----
+\newcounter{bigq}
+\newcommand{\BigQ}[1]{%
+  \stepcounter{bigq}%
+  \vspace{6pt}%
+  \noindent{\large\bfseries 第\chinese{bigq}大题\quad #1}%
+  \vspace{4pt}\par
+}
+
+\newcounter{subq}[bigq]
+\newcommand{\SubQ}{%
+  \stepcounter{subq}%
+  \noindent\textbf{（\arabic{subq}）}\quad
+}
+
+% 分隔线
+\newcommand{\examrule}{\noindent\rule{\linewidth}{0.6pt}}
+
+% ---- 文档开始 ----
+\begin{document}
+
+% ============================================================
+%  封面
+% ============================================================
+\begin{center}
+  {\LARGE\bfseries 《习近平新时代中国特色社会主义思想概论》}\\[8pt]
+  {\large\bfseries 全真模拟仿真试卷}\\[16pt]
+  \begin{tabular}{lll}
+    考试时间：120 分钟 & \quad & 满分：100 分 \\[4pt]
+    \multicolumn{3}{l}{注意事项：请将答案写在答题纸指定区域，写在本卷上无效。}
+  \end{tabular}
+  \vspace{4pt}
+
+  \examrule
+
+  \vspace{6pt}
+  \begin{tabular}{|c|c|c|c|c|c|c|c|c|}
+    \hline
+    \textbf{题号} & 一 & 二 & 三 & 四 & 五 & 六 & 七 & \textbf{总分} \\
+    \hline
+    \textbf{满分} & 30 & 20 & 50 & & & & & 100 \\
+    \hline
+    \textbf{得分} & & & & & & & & \\
+    \hline
+  \end{tabular}
+\end{center}
+
+\vspace{10pt}
+\examrule
+\vspace{6pt}
+
+% ============================================================
+%  第一大题
+% ============================================================
+\BigQ{单项选择题（每题1分，共30分）}
+
+\SubQ 习近平新时代中国特色社会主义思想创立的时代背景不包括以下哪一项？
+\begin{enumerate}[label=(\Alph*),topsep=0pt,itemsep=0pt,leftmargin=*]
+  \item 世界百年未有之大变局加速演进
+  \item 中华民族伟大复兴进入关键时期
+  \item 经济全球化遭遇逆流
+  \item 中国式现代化全面推进拓展
+\end{enumerate}
+
+\SubQ “两个确立”是指确立习近平同志党中央的核心、全党的核心地位，以及确立：
+\begin{enumerate}[label=(\Alph*),topsep=0pt,itemsep=0pt,leftmargin=*]
+  \item 中国特色社会主义理论体系指导地位
+  \item 科学发展观指导地位
+  \item 习近平新时代中国特色社会主义思想指导地位
+  \item “三个代表”重要思想指导地位
+\end{enumerate}
+
+\SubQ 我国社会主要矛盾已经转化为：
+\begin{enumerate}[label=(\Alph*),topsep=0pt,itemsep=0pt,leftmargin=*]
+  \item 人民日益增长的物质文化需要同落后的社会生产之间的矛盾
+  \item 无产阶级同资产阶级之间的矛盾
+  \item 人民日益增长的美好生活需要和不平衡不充分的发展之间的矛盾
+  \item 工人阶级同民族资产阶级之间的矛盾
+\end{enumerate}
+
+\SubQ 中国特色社会主义进入新时代，我国发展新的历史方位。这个新时代不是：
+\begin{enumerate}[label=(\Alph*),topsep=0pt,itemsep=0pt,leftmargin=*]
+  \item 承前启后、继往开来、继续夺取中国特色社会主义伟大胜利的时代
+  \item 决胜全面建成小康社会、进而全面建设社会主义现代化强国的时代
+  \item 全体中华儿女勠力同心、奋力实现中华民族伟大复兴中国梦的时代
+  \item 社会主义初级阶段结束、进入高级阶段的时代
+\end{enumerate}
+
+\SubQ 中国式现代化的第一个中国特色是：
+\begin{enumerate}[label=(\Alph*),topsep=0pt,itemsep=0pt,leftmargin=*]
+  \item 全体人民共同富裕的现代化
+  \item 物质文明和精神文明相协调的现代化
+  \item 人口规模巨大的现代化
+  \item 人与自然和谐共生的现代化
+\end{enumerate}
+
+\SubQ 推进中国式现代化必须牢牢把握的重大原则中，第一位的是：
+\begin{enumerate}[label=(\Alph*),topsep=0pt,itemsep=0pt,leftmargin=*]
+  \item 坚持以人民为中心的发展思想
+  \item 坚持深化改革开放
+  \item 坚持和加强党的全面领导
+  \item 坚持发扬斗争精神
+\end{enumerate}
+
+\SubQ 中国最大的国情就是：
+\begin{enumerate}[label=(\Alph*),topsep=0pt,itemsep=0pt,leftmargin=*]
+  \item 人口众多
+  \item 地大物博
+  \item 中国共产党的领导
+  \item 发展不平衡不充分
+\end{enumerate}
+
+\SubQ 人民立场是中国共产党的：
+\begin{enumerate}[label=(\Alph*),topsep=0pt,itemsep=0pt,leftmargin=*]
+  \item 价值取向
+  \item 根本政治立场
+  \item 执政理念
+  \item 工作方法
+\end{enumerate}
+
+\SubQ 共同富裕是中国特色社会主义的：
+\begin{enumerate}[label=(\Alph*),topsep=0pt,itemsep=0pt,leftmargin=*]
+  \item 战略目标
+  \item 本质要求
+  \item 发展动力
+  \item 制度保障
+\end{enumerate}
+
+\SubQ 改革开放是决定当代中国命运的：
+\begin{enumerate}[label=(\Alph*),topsep=0pt,itemsep=0pt,leftmargin=*]
+  \item 关键一步
+  \item 重要法宝
+  \item 根本途径
+  \item 关键一招
+\end{enumerate}
+
+\SubQ 全面深化改革的总目标是完善和发展中国特色社会主义制度，推进：
+\begin{enumerate}[label=(\Alph*),topsep=0pt,itemsep=0pt,leftmargin=*]
+  \item 国家治理体系和治理能力现代化
+  \item 法治中国建设
+  \item 社会主义市场经济体制
+  \item 教育强国战略
+\end{enumerate}
+
+\SubQ 新发展理念中，引领发展的第一动力是：
+\begin{enumerate}[label=(\Alph*),topsep=0pt,itemsep=0pt,leftmargin=*]
+  \item 协调
+  \item 绿色
+  \item 开放
+  \item 创新
+\end{enumerate}
+
+\SubQ “科技是第一生产力、人才是第一资源、创新是第一动力”的论述出自：
+\begin{enumerate}[label=(\Alph*),topsep=0pt,itemsep=0pt,leftmargin=*]
+  \item 邓小平理论
+  \item “三个代表”重要思想
+  \item 科学发展观
+  \item 习近平新时代中国特色社会主义思想
+\end{enumerate}
+
+\SubQ 全过程人民民主是社会主义民主政治的：
+\begin{enumerate}[label=(\Alph*),topsep=0pt,itemsep=0pt,leftmargin=*]
+  \item 基本形式
+  \item 本质属性
+  \item 实践路径
+  \item 制度载体
+\end{enumerate}
+
+\SubQ 发展全过程人民民主，必须坚持党的领导、人民当家作主、依法治国有机统一。其中，党的领导是：
+\begin{enumerate}[label=(\Alph*),topsep=0pt,itemsep=0pt,leftmargin=*]
+  \item 本质特征
+  \item 基本方式
+  \item 根本保证
+  \item 核心内容
+\end{enumerate}
+
+\SubQ 文化自信是更基础、更广泛、更深厚的自信，其深厚基础在于：
+\begin{enumerate}[label=(\Alph*),topsep=0pt,itemsep=0pt,leftmargin=*]
+  \item 革命文化和社会主义先进文化
+  \item 中国特色社会主义伟大实践
+  \item 中华优秀传统文化
+  \item 世界文明成果
+\end{enumerate}
+
+\SubQ 让人民生活幸福是：
+\begin{enumerate}[label=(\Alph*),topsep=0pt,itemsep=0pt,leftmargin=*]
+  \item 发展目标
+  \item 国之大者
+  \item 政策导向
+  \item 治理手段
+\end{enumerate}
+
+\SubQ 推动全体人民共同富裕取得更为明显的实质性进展，要坚持的原则不包括：
+\begin{enumerate}[label=(\Alph*),topsep=0pt,itemsep=0pt,leftmargin=*]
+  \item 尽力而为量力而行
+  \item 鼓励勤劳创新致富
+  \item 同步同等富裕
+  \item 坚持循序渐进
+\end{enumerate}
+
+\SubQ “绿水青山就是金山银山”理念揭示了保护生态环境就是：
+\begin{enumerate}[label=(\Alph*),topsep=0pt,itemsep=0pt,leftmargin=*]
+  \item 保护自然资本
+  \item 保护生产力
+  \item 保护生态安全
+  \item 保护公共健康
+\end{enumerate}
+
+\SubQ 生态文明建设应摆在全局工作的：
+\begin{enumerate}[label=(\Alph*),topsep=0pt,itemsep=0pt,leftmargin=*]
+  \item 基础位置
+  \item 突出位置
+  \item 辅助位置
+  \item 次要位置
+\end{enumerate}
+
+\SubQ “十个明确”是习近平新时代中国特色社会主义思想的：
+\begin{enumerate}[label=(\Alph*),topsep=0pt,itemsep=0pt,leftmargin=*]
+  \item 实践要求
+  \item 基本方略
+  \item 核心关键组成部分
+  \item 成果展示
+\end{enumerate}
+
+\SubQ “十四个坚持”是新时代坚持和发展中国特色社会主义的：
+\begin{enumerate}[label=(\Alph*),topsep=0pt,itemsep=0pt,leftmargin=*]
+  \item 基本方略
+  \item 理论基础
+  \item 历史经验
+  \item 思想精髓
+\end{enumerate}
+
+\SubQ “两个结合”指的是马克思主义基本原理同中国具体实际相结合，以及同：
+\begin{enumerate}[label=(\Alph*),topsep=0pt,itemsep=0pt,leftmargin=*]
+  \item 世界发展趋势相结合
+  \item 人类文明成果相结合
+  \item 中华优秀传统文化相结合
+  \item 现代科学技术相结合
+\end{enumerate}
+
+\SubQ 习近平新时代中国特色社会主义思想的历史地位不包括：
+\begin{enumerate}[label=(\Alph*),topsep=0pt,itemsep=0pt,leftmargin=*]
+  \item 当代中国马克思主义
+  \item 21世纪马克思主义
+  \item 实现马克思主义中国化新的飞跃
+  \item 第三次历史性飞跃
+\end{enumerate}
+
+\SubQ “五位一体”总体布局不包括：
+\begin{enumerate}[label=(\Alph*),topsep=0pt,itemsep=0pt,leftmargin=*]
+  \item 经济建设
+  \item 政治建设
+  \item 军事建设
+  \item 生态文明建设
+\end{enumerate}
+
+\SubQ “四个全面”战略布局最新表述为：全面建设社会主义现代化国家、全面深化改革、全面依法治国、\blank{3cm}。
+\begin{enumerate}[label=(\Alph*),topsep=0pt,itemsep=0pt,leftmargin=*]
+  \item 全面建成小康社会
+  \item 全面从严治党
+  \item 全面对外开放
+  \item 全面科技创新
+\end{enumerate}
+
+\SubQ 中国梦的本质是：
+\begin{enumerate}[label=(\Alph*),topsep=0pt,itemsep=0pt,leftmargin=*]
+  \item 国家富强、民族振兴、人民幸福
+  \item 国家强大、社会和谐、人民安康
+  \item 经济繁荣、科技进步、文化昌盛
+  \item 社会稳定、生态良好、国家安全
+\end{enumerate}
+
+\SubQ 构建新发展格局是以国内大循环为主体、\blank{3cm}相互促进。
+\begin{enumerate}[label=(\Alph*),topsep=0pt,itemsep=0pt,leftmargin=*]
+  \item 国际单循环
+  \item 国内国际双循环
+  \item 区域协同发展
+  \item 城乡融合循环
+\end{enumerate}
+
+\SubQ 党的基本路线是党和国家的生命线、人民的幸福线，其核心内容可概括为：
+\begin{enumerate}[label=(\Alph*),topsep=0pt,itemsep=0pt,leftmargin=*]
+  \item “一个中心、两个基本点”
+  \item “两个一百年”奋斗目标
+  \item “五大发展理念”
+  \item “四个全面”战略布局
+\end{enumerate}
+
+\SubQ 我国仍处于并将长期处于社会主义初级阶段的基本国情没有改变，这一判断是在社会主要矛盾\blank{3cm}之后仍然成立的。
+\begin{enumerate}[label=(\Alph*),topsep=0pt,itemsep=0pt,leftmargin=*]
+  \item 发生变化
+  \item 得到解决
+  \item 被提出
+  \item 被忽视
+\end{enumerate}
+
+\vspace{10pt}
+\examrule
+
+% ============================================================
+%  第二大题
+% ============================================================
+\BigQ{多项选择题（每题2分，共20分）}
+
+\SubQ（2分） 习近平新时代中国特色社会主义思想是“两个结合”的重大成果，“两个结合”指的是：
+\begin{enumerate}[label=(\Alph*),topsep=0pt,itemsep=0pt,leftmargin=*]
+  \item 马克思主义基本原理同中国具体实际相结合
+  \item 马克思主义基本原理同中华优秀传统文化相结合
+  \item 科学社会主义理论同西方发展模式相结合
+  \item 中国传统哲学同现代管理技术相结合
+  \item 革命精神同市场经济体制相结合
+\end{enumerate}
+
+\SubQ（2分） 中国式现代化的本质要求包括：
+\begin{enumerate}[label=(\Alph*),topsep=0pt,itemsep=0pt,leftmargin=*]
+  \item 坚持中国共产党领导
+  \item 坚持中国特色社会主义
+  \item 实现高质量发展
+  \item 发展全过程人民民主
+  \item 推动构建人类命运共同体
+\end{enumerate}
+
+\SubQ（2分） 推进中国式现代化必须正确处理的重大关系包括：
+\begin{enumerate}[label=(\Alph*),topsep=0pt,itemsep=0pt,leftmargin=*]
+  \item 顶层设计与实践探索的关系
+  \item 战略与策略的关系
+  \item 守正与创新的关系
+  \item 效率与公平的关系
+  \item 活力与秩序的关系
+\end{enumerate}
+
+\SubQ（2分） 新发展理念的科学内涵包括：
+\begin{enumerate}[label=(\Alph*),topsep=0pt,itemsep=0pt,leftmargin=*]
+  \item 创新是引领发展的第一动力
+  \item 协调是持续健康发展的内在要求
+  \item 绿色是永续发展的必要条件
+  \item 开放是国家繁荣发展的必由之路
+  \item 共享是中国特色社会主义的本质要求
+\end{enumerate}
+
+\SubQ（2分） 坚定中国特色社会主义制度自信，主要包括对以下哪些制度的自信？
+\begin{enumerate}[label=(\Alph*),topsep=0pt,itemsep=0pt,leftmargin=*]
+  \item 人民代表大会制度
+  \item 中国共产党领导的多党合作和政治协商制度
+  \item 民族区域自治制度
+  \item 基层群众自治制度
+  \item 社会主义市场经济体制
+\end{enumerate}
+
+\SubQ（2分） 全过程人民民主体现的“四个统一”是指：
+\begin{enumerate}[label=(\Alph*),topsep=0pt,itemsep=0pt,leftmargin=*]
+  \item 过程民主和成果民主的统一
+  \item 程序民主和实质民主的统一
+  \item 直接民主和间接民主的统一
+  \item 人民民主和国家意志的统一
+  \item 形式民主和结果民主的统一
+\end{enumerate}
+
+\SubQ（2分） 社会主义基本经济制度的新概括包括：
+\begin{enumerate}[label=(\Alph*),topsep=0pt,itemsep=0pt,leftmargin=*]
+  \item 公有制为主体、多种所有制经济共同发展
+  \item 按劳分配为主体、多种分配方式并存
+  \item 社会主义市场经济体制
+  \item 计划经济为主、市场调节为辅
+  \item 国有经济占绝对主导地位
+\end{enumerate}
+
+\SubQ（2分） 建设社会主义文化强国，必须坚持的方向和方针是：
+\begin{enumerate}[label=(\Alph*),topsep=0pt,itemsep=0pt,leftmargin=*]
+  \item 为人民服务、为社会主义服务
+  \item 百花齐放、百家争鸣
+  \item 古为今用、洋为中用
+  \item 以经济效益为中心
+  \item 以行政命令为导向
+\end{enumerate}
+
+\SubQ（2分） 推进生态文明建设，必须实行的制度是：
+\begin{enumerate}[label=(\Alph*),topsep=0pt,itemsep=0pt,leftmargin=*]
+  \item 最严格的生态环境保护制度
+  \item 全面建立资源高效利用制度
+  \item 严明生态环境保护责任制度
+  \item 自然资源无偿使用制度
+  \item 环境污染企业免责制度
+\end{enumerate}
+
+\SubQ（2分） 促进区域协调发展，总的思路是发挥各地区比较优势，形成：
+\begin{enumerate}[label=(\Alph*),topsep=0pt,itemsep=0pt,leftmargin=*]
+  \item 主体功能明显
+  \item 优势互补
+  \item 高质量发展的区域经济布局
+  \item 各自为政的发展格局
+  \item 封闭保守的竞争模式
+\end{enumerate}
+
+\vspace{10pt}
+\examrule
+
+% ============================================================
+%  第三大题
+% ============================================================
+\BigQ{简答题（共50分）}
+
+\SubQ（10分） 如何理解“两个确立”的决定性意义？
+
+\vspace{\stretch{1}}
+
+\SubQ（10分） 推进中国式现代化为什么必须牢牢把握五个重大原则？
+
+\vspace{\stretch{1}}
+
+\SubQ（10分） 全面深化改革的总目标是什么？为什么要坚持正确的改革方法论？
+
+\vspace{\stretch{1}}
+
+\SubQ（10分） 请阐述新发展理念的科学内涵与实践要求。
+
+\vspace{\stretch{1}}
+
+\SubQ（10分） 为什么说共同富裕是中国特色社会主义的本质要求？
+
+\vspace{\stretch{1}}
+
+\vspace{16pt}
+\examrule
+\vspace{4pt}
+\begin{center}
+  {\large\bfseries ——试题到此结束，请认真检查——}
+\end{center}
+\vspace{4pt}
+\examrule
+
+% ============================================================
+%  参考答案
+% ============================================================
+\newpage
+\setcounter{bigq}{0}
+
+\begin{center}
+  {\LARGE\bfseries 参考答案与评分标准}
+\end{center}
+\vspace{8pt}
+\examrule
+
+% -------- 第一大题参考答案 --------
+\BigQ{单项选择题参考答案}
+
+\begin{answerbox}
+1. C \quad 2. C \quad 3. C \quad 4. D \quad 5. C \quad 6. C \quad 7. C \quad 8. B \quad 9. B \quad 10. D \\
+11. A \quad 12. D \quad 13. D \quad 14. B \quad 15. C \quad 16. C \quad 17. B \quad 18. C \quad 19. B \quad 20. B \\
+21. C \quad 22. A \quad 23. C \quad 24. D \quad 25. C \quad 26. B \quad 27. A \quad 28. B \quad 29. A \quad 30. A
+\end{answerbox}
+
+% -------- 第二大题参考答案 --------
+\BigQ{多项选择题参考答案}
+
+\begin{answerbox}
+1. AB \quad 2. ABCDE \quad 3. ABCDE \quad 4. ABCDE \quad 5. ABCD \\
+6. ABCD \quad 7. ABC \quad 8. ABC \quad 9. ABC \quad 10. ABC
+\end{answerbox}
+
+% -------- 第三大题参考答案 --------
+\BigQ{简答题参考答案}
+
+\begin{answerbox}
+\textbf{（1）如何理解“两个确立”的决定性意义？（10分）}
+
+“两个确立”是指确立习近平同志党中央的核心、全党的核心地位，确立习近平新时代中国特色社会主义思想的指导地位。其决定性意义体现在以下几个方面：  
+第一，“两个确立”是新时代党和国家事业取得一切成就的根本原因。党的十八大以来，面对复杂严峻的国内外形势，正是因为有习近平总书记作为党中央的核心掌舵领航，有习近平新时代中国特色社会主义思想科学指引，党和国家事业才取得了历史性成就、发生了历史性变革。  
+第二，“两个确立”是战胜一切艰难险阻的最大确定性和最大底气。在前进道路上，各种风险挑战层出不穷，只有坚决维护党中央权威和集中统一领导，才能确保全党全国步调一致向前进。  
+第三，“两个确立”是实现中华民族伟大复兴的政治保证。它反映了全党全国各族人民的共同愿望，是推动中国式现代化行稳致远的根本保障。因此，“两个确立”对新时代党和国家事业发展具有决定性意义。
+\end{answerbox}
+
+\begin{answerbox}
+\textbf{（2）推进中国式现代化为什么必须牢牢把握五个重大原则？（10分）}
+
+推进中国式现代化必须牢牢把握五个重大原则，即坚持和加强党的全面领导、坚持中国特色社会主义道路、坚持以人民为中心的发展思想、坚持深化改革开放、坚持发扬斗争精神。这五个原则构成了中国式现代化的根本遵循，其必要性如下：  
+首先，党的领导是中国式现代化最本质的特征和最大优势，只有坚持党的全面领导，才能确保现代化建设始终沿着正确方向前进。  
+其次，中国特色社会主义道路是实现中华民族伟大复兴的唯一正确道路，脱离这条道路就会迷失方向。  
+再次，以人民为中心体现了社会主义的本质要求，现代化最终是为了让人民过上更好生活。  
+第四，改革开放是推动发展的根本动力，唯有不断深化改革、扩大开放，才能破除体制机制障碍。  
+最后，面对复杂环境和风险挑战，必须发扬斗争精神，勇于攻坚克难。这五大原则相互联系、有机统一，是确保中国式现代化行稳致远的关键所在。
+\end{answerbox}
+
+\begin{answerbox}
+\textbf{（3）全面深化改革的总目标是什么？为什么要坚持正确的改革方法论？（10分）}
+
+全面深化改革的总目标是完善和发展中国特色社会主义制度，推进国家治理体系和治理能力现代化。这一目标是一个有机整体：前者规定了改革的根本方向，即无论怎么改都不能偏离社会主义方向；后者明确了改革的时代要求，即将制度优势转化为治理效能。  
+
+坚持正确的改革方法论至关重要，原因在于：  
+第一，改革是一项系统工程，必须增强系统性、整体性、协同性，防止畸重畸轻、顾此失彼。  
+第二，要处理好顶层设计与摸着石头过河的关系，既要有宏观规划，也要尊重基层首创精神。  
+第三，要统筹改革发展稳定，在保持社会稳定中推进改革，通过改革促进发展。  
+第四，胆子要大、步子要稳，既要敢于突破，又要防范颠覆性错误。  
+第五，重大改革要于法有据，实现改革与法治同步推进。  
+这些方法论确保了改革蹄疾步稳、纵深推进，是新时代全面深化改革取得成功的重要保障。
+\end{answerbox}
+
+\begin{answerbox}
+\textbf{（4）请阐述新发展理念的科学内涵与实践要求。（10分）}
+
+新发展理念是创新、协调、绿色、开放、共享的发展理念，是实现高质量发展的指导原则。  
+
+其科学内涵包括：  
+- \textbf{创新}是引领发展的第一动力，解决发展动力问题；  
+- \textbf{协调}是持续健康发展的内在要求，解决发展不平衡问题；  
+- \textbf{绿色}是永续发展的必要条件，解决人与自然和谐共生问题；  
+- \textbf{开放}是国家繁荣发展的必由之路，解决发展内外联动问题；  
+- \textbf{共享}是中国特色社会主义的本质要求，解决社会公平正义问题。  
+
+其实践要求体现在：  
+- 必须把创新放在国家发展全局的核心位置，全面提升自主创新能力；  
+- 正确处理局部与全局、当前与长远的关系，不断增强发展的整体性；  
+- 推动形成绿色生产方式和生活方式，实现经济社会发展与生态环境保护协同共进；  
+- 构建更高水平开放型经济新体制，积极参与全球经济治理；  
+- 坚持全民共享、全面共享、共建共享、渐进共享，不断推进共同富裕。  
+只有完整、准确、全面贯彻新发展理念，才能真正实现高质量发展。
+\end{answerbox}
+
+\begin{answerbox}
+\textbf{（5）为什么说共同富裕是中国特色社会主义的本质要求？（10分）}
+
+共同富裕是中国特色社会主义的本质要求，这一论断具有深刻的理论依据和现实意义。  
+
+从理论上看，社会主义的本质是解放和发展生产力，消灭剥削，消除两极分化，最终达到共同富裕。这决定了我们的发展不是为了少数人富裕，而是为了让全体人民共享发展成果。  
+
+从制度上看，公有制为主体、按劳分配为主体的基本经济制度，决定了财富分配更倾向于公平合理，为实现共同富裕提供了制度保障。  
+
+从目标上看，中国式现代化是全体人民共同富裕的现代化，区别于西方两极分化的现代化模式。实现共同富裕不仅是经济问题，更是关系党的执政基础的重大政治问题。  
+
+在实践中，要坚持循序渐进、尽力而为量力而行的原则，鼓励勤劳创新致富，构建初次分配、再分配、三次分配协调配套的基础性制度安排，逐步缩小城乡、区域和群体差距。因此，共同富裕不是整齐划一的平均主义，而是动态发展的过程，是中国特色社会主义制度优越性的集中体现。
+\end{answerbox}
+
+\vspace{12pt}
+\examrule
+\begin{center}
+  \textit{参考答案仅供参考，评分时应酌情给分，步骤正确可得过程分。}
+\end{center}
+
+\end{document}
